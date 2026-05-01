@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NPPW | VA Training Program</title>
+  <style>
+    :root{
+      --bg:#081223;
+      --bg2:#0f1d36;
+      --panel:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.12);
+      --text:#f5f8fb;
+      --muted:#c0d0e0;
+      --blue:#5bb3ff;
+      --green:#89efb5;
+      --yellow:#ffd76f;
+      --purple:#c5a6ff;
+      --shadow:0 24px 60px rgba(0,0,0,.36);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(91,179,255,.18), transparent 0 28%),
+        radial-gradient(circle at 88% 14%, rgba(137,239,181,.10), transparent 0 22%),
+        linear-gradient(135deg,var(--bg),#0c1629 42%,var(--bg2));
+      min-height:100vh;
+    }
+    .wrap{width:min(1240px,calc(100% - 28px));margin:0 auto;padding:20px 0 60px}
+    .topbar{position:sticky;top:14px;z-index:50;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 18px;margin:8px auto 22px;background:rgba(6,14,25,.74);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+    .brand{display:flex;align-items:center;gap:14px}
+    .badge{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(91,179,255,.26),rgba(137,239,181,.18));border:1px solid rgba(255,255,255,.14);font-weight:800;letter-spacing:.08em}
+    .brand h1{margin:0;font-size:1rem;letter-spacing:.05em;text-transform:uppercase}
+    .brand p{margin:4px 0 0;color:var(--muted);font-size:.92rem}
+    .nav{display:flex;flex-wrap:wrap;gap:10px}
+    .nav a{padding:10px 14px;border-radius:999px;text-decoration:none;color:var(--text);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);transition:.2s ease}
+    .nav a:hover{transform:translateY(-1px);background:rgba(255,255,255,.09)}
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:20px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .hero-copy{padding:32px}
+    .eyebrow{display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(91,179,255,.1);border:1px solid rgba(91,179,255,.2);font-size:.84rem;color:#daf0ff;text-transform:uppercase;letter-spacing:.05em}
+    h2{margin:16px 0 12px;font-size:clamp(1.9rem,3vw,3.2rem);line-height:1.05}
+    .hero-copy p{margin:0;color:var(--muted);line-height:1.7;font-size:1.02rem}
+    .summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:22px}
+    .metric{padding:18px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+    .metric strong{display:block;font-size:1.8rem;margin-bottom:8px}
+    .metric span{color:var(--muted);line-height:1.5}
+
+    .section{margin-top:24px}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:14px}
+    .section-head h3{margin:0;font-size:1.5rem}
+    .section-head p{margin:6px 0 0;color:var(--muted)}
+    .modules{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    details{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:18px 18px 8px}
+    details summary{cursor:pointer;list-style:none;font-weight:700;font-size:1rem;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    details summary::-webkit-details-marker{display:none}
+    details summary::after{content:'+';font-size:1.3rem;color:#dcecff}
+    details[open] summary::after{content:'–'}
+    details p{color:var(--muted);line-height:1.6}
+    details ul{padding-left:18px;margin:10px 0 8px;color:var(--muted)}
+    details li{margin:7px 0;line-height:1.5}
+
+    .roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .week{padding:22px}
+    .week h4{margin:0 0 10px;font-size:1.1rem}
+    .week p{margin:0 0 14px;color:var(--muted);line-height:1.6}
+    .day{padding:12px 14px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);margin-top:10px}
+    .day strong{display:block;margin-bottom:5px;font-size:.95rem}
+    .day span{display:block;color:var(--muted);line-height:1.45;font-size:.93rem}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .panel{padding:22px}
+    .panel h4{margin:0 0 12px}
+    .panel p,.panel li{color:var(--muted);line-height:1.6}
+    .panel ul{padding-left:18px;margin:0}
+
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .kpi{padding:18px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+    .kpi h4{margin:0 0 8px;font-size:1rem}
+    .kpi p{margin:0;color:var(--muted);line-height:1.55;font-size:.93rem}
+
+    footer{margin-top:28px;padding:22px;border-radius:24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--muted)}
+    footer strong{color:var(--text)}
+    @media (max-width:1100px){.hero,.modules,.roadmap,.grid-2,.kpi-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:760px){.summary-grid{grid-template-columns:1fr}.wrap{width:min(100% - 18px,1240px)}.topbar{padding:12px;flex-direction:column;align-items:flex-start}.hero-copy,.week,.panel{padding:18px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="badge">NP</div>
+        <div>
+          <h1>NPPW | VA Training Program</h1>
+          <p>Virtual Assistant – Operations, Work Order & Data Support</p>
+        </div>
+      </div>
+      <div class="nav">
+        <a href="index.html">Back to System Workflow</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="card hero-copy">
+        <span class="eyebrow">Separate Training Page for NPPW</span>
+        <h2>In-depth training program built for work order support, verification, phone handling, and data operations.</h2>
+        <p>
+          This page is designed as a presentation-ready training overview for the CEO and leadership team. It shows how a VA will be trained to support NPPW’s operational environment, especially around <strong>ServiceChannel verification</strong>, <strong>cross-system data transfer</strong>, <strong>call handling</strong>, and <strong>reporting discipline</strong>.
+        </p>
+      </div>
+      <div class="card summary-grid">
+        <div class="metric"><strong>9 modules</strong><span>Core foundations covering operations, compliance, phone work, reporting, and marketing support.</span></div>
+        <div class="metric"><strong>15 days</strong><span>Structured rollout from foundation, to guided practice, to live simulation and controlled handoff.</span></div>
+        <div class="metric"><strong>Hands-on</strong><span>Uses SOP practice, simulations, validation drills, and exception handling exercises.</span></div>
+        <div class="metric"><strong>CEO-ready</strong><span>Built to show that support is systematic, measurable, and scalable—not just task delegation.</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h3>Core training modules</h3>
+          <p>Each module below reflects the operational needs you provided for NPPW.</p>
+        </div>
+      </div>
+      <div class="modules">
+        <details open>
+          <summary>1. Attention to Detail & Accuracy Training</summary>
+          <p>This is the critical foundation module and should be mastered first.</p>
+          <ul>
+            <li>Data accuracy drills and error spotting exercises</li>
+            <li>Before/after validation practice</li>
+            <li>Double-check protocol system</li>
+            <li>Real work order review simulations</li>
+          </ul>
+        </details>
+        <details>
+          <summary>2. ServiceChannel Work Order Management</summary>
+          <p>Teaches the VA to understand work order flow from creation to closure.</p>
+          <ul>
+            <li>Work order lifecycle: create → dispatch → complete → close</li>
+            <li>Vendor assignment logic and position 1 vendor awareness</li>
+            <li>Ticket updates and documentation standards</li>
+            <li>Photo and timestamp verification rules</li>
+            <li>Handling exceptions: missing check-in, incomplete job, missing photos</li>
+          </ul>
+        </details>
+        <details>
+          <summary>3. Data Transfer & Multi-System Operations</summary>
+          <p>Focuses on moving information across tools without causing duplicates or confusion.</p>
+          <ul>
+            <li>Cross-system data mapping</li>
+            <li>Preventing duplicate entries</li>
+            <li>SOP-based data transfer flow</li>
+            <li>System role clarity: what belongs in each platform</li>
+          </ul>
+        </details>
+        <details>
+          <summary>4. Vendor Verification & Compliance</summary>
+          <p>Builds the VA's ability to review proof of work and identify red flags.</p>
+          <ul>
+            <li>Valid vs. invalid job completion</li>
+            <li>Time-on-site validation rules</li>
+            <li>Photo compliance review</li>
+            <li>Red flag identification</li>
+            <li>Escalation workflow for non-compliance</li>
+          </ul>
+        </details>
+        <details>
+          <summary>5. Communication & Phone Operations</summary>
+          <p>Prepares the VA to handle calls professionally and document outcomes correctly.</p>
+          <ul>
+            <li>Professional call handling scripts</li>
+            <li>Ticket update communication format</li>
+            <li>Vendor communication standards</li>
+            <li>Escalation language and protocols</li>
+            <li>Logging phone updates into systems</li>
+          </ul>
+        </details>
+        <details>
+          <summary>6. Checklist & SOP Discipline</summary>
+          <p>Ensures the VA follows the process consistently every time.</p>
+          <ul>
+            <li>Step-by-step checklist execution</li>
+            <li>Task completion verification method</li>
+            <li>No-step-skipping discipline system</li>
+            <li>Standard operating workflow practice</li>
+          </ul>
+        </details>
+        <details>
+          <summary>7. System Ecosystem Awareness</summary>
+          <p>Teaches the VA how the systems connect and where each one begins and ends.</p>
+          <ul>
+            <li>ServiceChannel for operations verification</li>
+            <li>Jobber for delivery / invoicing prep</li>
+            <li>Acuity booking limitations and double-booking risk</li>
+            <li>Internal tools and process boundaries</li>
+          </ul>
+        </details>
+        <details>
+          <summary>8. Reporting & Documentation Training</summary>
+          <p>Provides visibility for leadership and supports issue tracking.</p>
+          <ul>
+            <li>Daily and weekly reporting structure</li>
+            <li>Issue tracking logs</li>
+            <li>Performance summary creation</li>
+            <li>Escalation documentation standards</li>
+          </ul>
+        </details>
+        <details>
+          <summary>9. Marketing & Branding Support</summary>
+          <p>Prepares for future support beyond operations once the admin workload is stabilized.</p>
+          <ul>
+            <li>Basic SEO principles</li>
+            <li>Google Business Profile updates</li>
+            <li>Service description consistency</li>
+            <li>Simple content updates</li>
+            <li>Brand tone alignment</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h3>15-day training roadmap</h3>
+          <p>A practical schedule that moves from foundations to live-process readiness.</p>
+        </div>
+      </div>
+      <div class="roadmap">
+        <div class="card week">
+          <h4>Week 1 • Foundation & system understanding</h4>
+          <p>Introduce the business, the service model, and the importance of precision in recurring work order operations.</p>
+          <div class="day"><strong>Day 1</strong><span>NPPW business model, services, national retail context, and the VA role overview.</span></div>
+          <div class="day"><strong>Day 2</strong><span>Attention to detail training, error spotting drills, and double-check protocol system.</span></div>
+          <div class="day"><strong>Day 3</strong><span>System ecosystem overview: ServiceChannel, Acuity, Jobber, Google Sheets, internal tools.</span></div>
+          <div class="day"><strong>Day 4</strong><span>Work order lifecycle and ticket documentation standards.</span></div>
+          <div class="day"><strong>Day 5</strong><span>Checklist and SOP discipline workshop with review exercises.</span></div>
+        </div>
+        <div class="card week">
+          <h4>Week 2 • Operations & compliance practice</h4>
+          <p>Build confidence through real-world work order practice and exception handling drills.</p>
+          <div class="day"><strong>Day 6</strong><span>ServiceChannel work order management and vendor assignment logic.</span></div>
+          <div class="day"><strong>Day 7</strong><span>Photo, timestamp, and completion proof verification rules.</span></div>
+          <div class="day"><strong>Day 8</strong><span>Vendor compliance training: valid vs invalid completion, red flags, time-on-site review.</span></div>
+          <div class="day"><strong>Day 9</strong><span>Escalation handling for missing check-ins, incomplete jobs, or insufficient proof.</span></div>
+          <div class="day"><strong>Day 10</strong><span>Phone handling, vendor communication, and logging call outcomes correctly.</span></div>
+        </div>
+        <div class="card week">
+          <h4>Week 3 • Data flow, reporting & controlled handoff</h4>
+          <p>Focus on system-to-system coordination, reporting clarity, and demonstration of readiness.</p>
+          <div class="day"><strong>Day 11</strong><span>Cross-system data mapping and Acuity → Jobber process flow with duplicate prevention.</span></div>
+          <div class="day"><strong>Day 12</strong><span>Google Sheets reporting, issue tracking logs, and weekly summary structure.</span></div>
+          <div class="day"><strong>Day 13</strong><span>Simulated end-to-end scenarios covering booking, verification, escalation, and reporting.</span></div>
+          <div class="day"><strong>Day 14</strong><span>Shadowing / supervised practice using a real or sample queue.</span></div>
+          <div class="day"><strong>Day 15</strong><span>Final assessment, QA calibration, readiness sign-off, and roadmap for future marketing / branding support.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h3>Assessment and control framework</h3>
+          <p>How leadership can evaluate if the training worked.</p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card panel">
+          <h4>Practical assessments</h4>
+          <ul>
+            <li>Accuracy drill score on work order review simulations</li>
+            <li>Checklist compliance during live practice</li>
+            <li>ServiceChannel verification accuracy</li>
+            <li>Phone script adherence and documentation quality</li>
+            <li>Correct data mapping from Acuity to Jobber</li>
+            <li>Daily reporting completion and clarity</li>
+          </ul>
+        </div>
+        <div class="card panel">
+          <h4>QA expectations</h4>
+          <ul>
+            <li>No step skipping on critical workflows</li>
+            <li>Consistent escalation when proof is incomplete or questionable</li>
+            <li>Clear note-taking and issue classification</li>
+            <li>Protection against duplicate entries and bad data movement</li>
+            <li>Professional communication with internal team and vendors</li>
+            <li>Ability to summarize issues for leadership review</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h3>Leadership KPIs to track after go-live</h3>
+          <p>Recommended measurement points for the CEO / management team.</p>
+        </div>
+      </div>
+      <div class="kpi-grid">
+        <div class="card kpi"><h4>Verification turnaround</h4><p>Average time needed to review and clear each ticket or location batch.</p></div>
+        <div class="card kpi"><h4>Exception rate</h4><p>How many tickets are flagged for missing check-in, low time on site, or missing photos.</p></div>
+        <div class="card kpi"><h4>Data accuracy</h4><p>Percent of correctly transferred bookings / jobs without rework or duplication.</p></div>
+        <div class="card kpi"><h4>Reporting consistency</h4><p>Whether daily and weekly logs are completed, useful, and on time for leadership review.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <strong>Presentation note:</strong> This page is intentionally structured for a CEO discussion. It shows that the VA support plan for NPPW is not generic staffing—it is a documented operating system with measurable training outcomes.
+    </footer>
+  </div>
+</body>
+</html>
