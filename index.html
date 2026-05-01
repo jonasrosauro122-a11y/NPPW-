@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VA Automation Training | Acuity • Zapier • Jobber • Google Sheets</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: rgba(11, 21, 38, 0.8);
+      --panel-2: rgba(16, 27, 48, 0.9);
+      --text: #eef4ff;
+      --muted: #a7b7d6;
+      --line: rgba(255,255,255,0.09);
+      --accent: #68d7ff;
+      --accent-2: #9c7bff;
+      --success: #52d39b;
+      --warning: #ffbf66;
+      --danger: #ff7d7d;
+      --acuity: #5c6cff;
+      --zapier: #ff5a1f;
+      --jobber: #00b38a;
+      --sheets: #34a853;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --max: 1280px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(92,108,255,.18), transparent 32%),
+        radial-gradient(circle at 85% 15%, rgba(0,179,138,.14), transparent 28%),
+        radial-gradient(circle at 80% 80%, rgba(255,90,31,.15), transparent 30%),
+        linear-gradient(160deg, #07111f 0%, #09152a 45%, #08111d 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      width: 420px;
+      height: 420px;
+      border-radius: 999px;
+      filter: blur(70px);
+      pointer-events: none;
+      opacity: .35;
+      z-index: 0;
+      animation: drift 14s ease-in-out infinite alternate;
+    }
+
+    body::before {
+      top: -80px;
+      right: -80px;
+      background: rgba(104, 215, 255, 0.15);
+    }
+
+    body::after {
+      bottom: -120px;
+      left: -120px;
+      background: rgba(156, 123, 255, 0.14);
+      animation-duration: 18s;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0,0,0) scale(1); }
+      to { transform: translate3d(32px,-24px,0) scale(1.08); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 rgba(104,215,255,0); }
+      50% { box-shadow: 0 0 24px rgba(104,215,255,.28); }
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .wrap {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(4, 10, 20, 0.72);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 800;
+      letter-spacing: .03em;
+    }
+
+    .brand-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid;
+      place-items: center;
+      color: #07111f;
+      font-weight: 900;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .nav-links a,
+    .btn {
+      text-decoration: none;
+      color: var(--text);
+      padding: 11px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+      font-size: .95rem;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover,
+    .btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #06111d;
+      font-weight: 800;
+      border: none;
+      box-shadow: 0 14px 34px rgba(104,215,255,0.18);
+    }
+
+    .btn.soft {
+      background: rgba(104,215,255,0.08);
+      border-color: rgba(104,215,255,0.2);
+    }
+
+    .hero {
+      padding: 66px 0 38px;
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-copy {
+      padding: 34px;
+      animation: rise .7s ease both;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: .85rem;
+      color: #d4e7ff;
+      background: rgba(104,215,255,0.08);
+      border: 1px solid rgba(104,215,255,0.18);
+      padding: 8px 14px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2rem, 4.6vw, 4rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.72;
+      max-width: 60ch;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .kpis {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .kpi {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .kpi .num {
+      font-size: 1.85rem;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .kpi .label {
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.5;
+    }
+
+    .hero-side {
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      animation: rise .85s ease both;
+    }
+
+    .stack-label {
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: #8db6ff;
+      margin-bottom: 8px;
+    }
+
+    .flow {
+      display: grid;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .flow-node {
+      display: grid;
+      grid-template-columns: 52px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.03);
+      transition: transform .22s ease, border-color .22s ease, background .22s ease;
+    }
+
+    .flow-node:hover {
+      transform: translateX(4px);
+      border-color: rgba(255,255,255,0.14);
+    }
+
+    .flow-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: white;
+      font-size: .94rem;
+    }
+
+    .acuity { background: linear-gradient(135deg, #7b88ff, #5564ff); }
+    .zapier { background: linear-gradient(135deg, #ff7c42, #ff5a1f); }
+    .jobber { background: linear-gradient(135deg, #00c69a, #009f7a); }
+    .sheets { background: linear-gradient(135deg, #41bd61, #2f9a4a); }
+
+    .flow-node strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .flow-node span {
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.45;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: .8rem;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: #dbebff;
+      white-space: nowrap;
+    }
+
+    section {
+      padding: 24px 0;
+    }
+
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.45rem, 2.4vw, 2.2rem);
+      letter-spacing: -.03em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 66ch;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .tool-card,
+    .module,
+    .qa-card,
+    .metric-card,
+    .note-box,
+    .sim-card,
+    .table-card,
+    .scenario-card,
+    .role-card {
+      padding: 22px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025));
+      box-shadow: var(--shadow);
+    }
+
+    .tool-card {
+      min-height: 240px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tool-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -35% auto;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      filter: blur(16px);
+    }
+
+    .tool-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 110px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .tool-card h3,
+    .module h3,
+    .sim-card h3,
+    .table-card h3,
+    .scenario-card h3,
+    .role-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .tool-card p,
+    .module p,
+    .qa-card p,
+    .metric-card p,
+    .note-box p,
+    .role-card p,
+    .scenario-card p,
+    .sim-card p {
+      color: var(--muted);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    .tool-card ul,
+    .module ul,
+    .role-card ul,
+    .qa-card ul,
+    .scenario-card ul {
+      padding-left: 18px;
+      margin: 14px 0 0;
+      color: #dce9ff;
+      line-height: 1.65;
+    }
+
+    .workflow-board {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .module {
+      min-height: 260px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .module .phase {
+      display: inline-flex;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: rgba(104,215,255,0.08);
+      border: 1px solid rgba(104,215,255,0.15);
+      color: #cfeeff;
+    }
+
+    .right-column {
+      display: grid;
+      gap: 16px;
+    }
+
+    .mini-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .mini-step {
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,0.03);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .mini-step strong { display: block; }
+    .mini-step small { color: var(--muted); }
+
+    .training-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .day-card {
+      padding: 20px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      min-height: 420px;
+    }
+
+    .day-card .day {
+      display: inline-flex;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 800;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+
+    .day-card h3 { margin: 0 0 10px; font-size: 1.15rem; }
+    .day-card p { color: var(--muted); line-height: 1.62; margin: 0 0 12px; }
+    .day-card ul { padding-left: 18px; line-height: 1.58; margin: 0; }
+
+    .roles-grid,
+    .qa-grid,
+    .metrics-grid,
+    .scenarios-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .metrics-grid .metric-card h3 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+    }
+
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .checklist-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: flex;
+      gap: 12px;
+      align-items: start;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .check-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(82,211,155,.12);
+      color: var(--success);
+      font-weight: 900;
+      flex: 0 0 auto;
+      margin-top: 2px;
+    }
+
+    .sim-layout {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-size: .92rem;
+      color: #dce9ff;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      padding: 14px 15px;
+      border-radius: 14px;
+      outline: none;
+      transition: border-color .2s ease, background .2s ease;
+      font: inherit;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(104,215,255,.45);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .sim-visual {
+      display: grid;
+      gap: 16px;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+    }
+
+    .pipe-node {
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      min-height: 142px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .pipe-node.active {
+      border-color: rgba(104,215,255,.45);
+      transform: translateY(-4px);
+      animation: pulseGlow 1.4s ease infinite;
+    }
+
+    .pipe-node.done {
+      border-color: rgba(82,211,155,.35);
+      background: rgba(82,211,155,.08);
+    }
+
+    .pipe-node.fail {
+      border-color: rgba(255,125,125,.38);
+      background: rgba(255,125,125,.08);
+    }
+
+    .pipe-node h4 {
+      margin: 10px 0 8px;
+      font-size: 1rem;
+    }
+
+    .pipe-node p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: .9rem;
+    }
+
+    .step-status {
+      display: inline-flex;
+      margin-top: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.07);
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .console,
+    .sheet {
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(6, 14, 27, 0.82);
+    }
+
+    .console {
+      min-height: 220px;
+    }
+
+    .console-header,
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .console-lines {
+      display: grid;
+      gap: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: .9rem;
+      color: #dcf8ff;
+    }
+
+    .console-line {
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.05);
+      opacity: 0;
+      transform: translateY(8px);
+      animation: rise .35s ease forwards;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      color: #e9f3ff;
+      font-size: .93rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      vertical-align: top;
+    }
+
+    th {
+      color: #a8c8ff;
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .tag {
+      display: inline-flex;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: .74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      background: rgba(255,255,255,.06);
+    }
+
+    .tag.success { background: rgba(82,211,155,.12); color: #9ef1c3; }
+    .tag.warn { background: rgba(255,191,102,.14); color: #ffd79f; }
+    .tag.fail { background: rgba(255,125,125,.12); color: #ffb4b4; }
+
+    .footer {
+      padding: 26px 0 50px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.7;
+    }
+
+    .footer strong { color: #eaf3ff; }
+
+    @media (max-width: 1180px) {
+      .hero,
+      .workflow-board,
+      .sim-layout,
+      .checklist {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .training-grid { grid-template-columns: repeat(2, 1fr); }
+      .roles-grid, .qa-grid, .metrics-grid, .scenarios-grid { grid-template-columns: repeat(2, 1fr); }
+      .pipeline { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 760px) {
+      .nav-inner { flex-direction: column; align-items: flex-start; }
+      .grid-4, .module-grid, .training-grid, .roles-grid, .qa-grid, .metrics-grid, .scenarios-grid, .pipeline, .kpis {
+        grid-template-columns: 1fr;
+      }
+      .hero-copy, .hero-side, .tool-card, .module, .qa-card, .metric-card, .day-card, .sim-card, .table-card, .scenario-card, .role-card {
+        padding: 20px;
+      }
+      .flow-node { grid-template-columns: 52px 1fr; }
+      .flow-node .chip { grid-column: 1 / -1; justify-self: start; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-badge">VA</div>
+        <div>
+          <div style="font-size:1.02rem;">Automation Training Demo</div>
+          <div style="font-size:.78rem;color:var(--muted);">Acuity • Zapier • Jobber • Google Sheets</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="#stack">Tool Stack</a>
+        <a href="#process">Process</a>
+        <a href="#training">Training</a>
+        <a href="#simulator">Live Demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="panel hero-copy">
+        <div class="eyebrow">CEO Presentation Ready • VA Training Focused • No-Code Workflow</div>
+        <h1>Train VAs to run and monitor a real automation workflow.</h1>
+        <p class="lead">
+          This presentation website teaches how a Virtual Assistant can support an automation pipeline using <strong>Acuity Scheduling</strong>, <strong>Zapier</strong>, <strong>Jobber</strong>, and <strong>Google Sheets</strong>. It includes the business process, VA responsibilities, QA checkpoints, escalation rules, and a working demo simulation you can present to leadership.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#simulator">Launch Demo Automation</a>
+          <a class="btn soft" href="#training">View Training Plan</a>
+          <a class="btn" href="#process">See End-to-End SOP</a>
+        </div>
+        <div class="kpis">
+          <div class="kpi">
+            <div class="num">2 Zaps</div>
+            <div class="label">One Zap moves bookings into operations, the second Zap pushes operational data into reporting.</div>
+          </div>
+          <div class="kpi">
+            <div class="num">5 Days</div>
+            <div class="label">A focused training plan that teaches the platform, workflow logic, monitoring, and exception handling.</div>
+          </div>
+          <div class="kpi">
+            <div class="num">1 VA SOP</div>
+            <div class="label">Clear standard operating procedure covering validation, logging, review, and escalation.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel hero-side">
+        <div>
+          <div class="stack-label">Reference Architecture</div>
+          <div class="flow">
+            <div class="flow-node">
+              <div class="flow-icon acuity">AC</div>
+              <div>
+                <strong>Acuity Scheduling</strong>
+                <span>Client books appointment and submits service details.</span>
+              </div>
+              <div class="chip">Booking Trigger</div>
+            </div>
+            <div class="flow-node">
+              <div class="flow-icon zapier">Z1</div>
+              <div>
+                <strong>Zapier — Intake Automation</strong>
+                <span>Validates the booking and sends the record into Jobber.</span>
+              </div>
+              <div class="chip">Zap #1</div>
+            </div>
+            <div class="flow-node">
+              <div class="flow-icon jobber">JB</div>
+              <div>
+                <strong>Jobber</strong>
+                <span>Creates or updates the operational record for fulfillment.</span>
+              </div>
+              <div class="chip">Ops System</div>
+            </div>
+            <div class="flow-node">
+              <div class="flow-icon zapier">Z2</div>
+              <div>
+                <strong>Zapier — Reporting Automation</strong>
+                <span>Listens to Jobber activity and pushes clean data to the tracker.</span>
+              </div>
+              <div class="chip">Zap #2</div>
+            </div>
+            <div class="flow-node">
+              <div class="flow-icon sheets">GS</div>
+              <div>
+                <strong>Google Sheets</strong>
+                <span>Stores the log for visibility, QA, metrics, and management reporting.</span>
+              </div>
+              <div class="chip">Reporting Layer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="stack">
+      <div class="section-head">
+        <div>
+          <h2>Tool stack and what the VA needs to understand</h2>
+          <p>The goal is not just to “use the apps.” The goal is for the VA to understand the business handoff from booking, to automation, to operations, to reporting.</p>
+        </div>
+      </div>
+      <div class="grid-4">
+        <article class="tool-card">
+          <div class="tool-pill acuity">Acuity Scheduling</div>
+          <h3>Client intake and appointment source</h3>
+          <p>This is the front door of the workflow. The client books, enters contact details, chooses a service, and creates the record that will trigger downstream automation.</p>
+          <ul>
+            <li>What fields must be captured correctly</li>
+            <li>How appointment types affect routing</li>
+            <li>How reschedules and cancellations change the workflow</li>
+          </ul>
+        </article>
+        <article class="tool-card">
+          <div class="tool-pill zapier">Zapier</div>
+          <h3>Automation engine and logic layer</h3>
+          <p>Zapier connects the platforms, maps fields, and applies workflow rules. The VA must know what the Zap should do, what a successful run looks like, and how to identify a failed run.</p>
+          <ul>
+            <li>Triggers, actions, filters, and field mapping</li>
+            <li>Test runs and task history review</li>
+            <li>Error handling and escalation checkpoints</li>
+          </ul>
+        </article>
+        <article class="tool-card">
+          <div class="tool-pill jobber">Jobber</div>
+          <h3>Operations execution system</h3>
+          <p>Jobber becomes the working record for the team. Depending on the final setup, the automation may create or update a client, request, quote, or job for fulfillment.</p>
+          <ul>
+            <li>What record type should be created</li>
+            <li>How to confirm the record landed in the right place</li>
+            <li>Which fields are critical for service delivery</li>
+          </ul>
+        </article>
+        <article class="tool-card">
+          <div class="tool-pill sheets">Google Sheets</div>
+          <h3>Tracker, reporting, and QA visibility</h3>
+          <p>Sheets is the control board. It gives leadership and the VA a simple view of bookings, automation results, assignment status, and daily reconciliation.</p>
+          <ul>
+            <li>How rows are added or updated</li>
+            <li>What columns need to stay standardized</li>
+            <li>How to use the sheet for audit and follow-up</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="process">
+      <div class="section-head">
+        <div>
+          <h2>End-to-end process deep dive</h2>
+          <p>This model uses two automations so the business can keep the operational workflow separate from the management reporting workflow.</p>
+        </div>
+      </div>
+
+      <div class="workflow-board">
+        <div class="module-grid">
+          <article class="module">
+            <div class="phase">Step 1</div>
+            <h3>Acuity captures the client booking</h3>
+            <p>The process starts when a client books through Acuity. The booking must contain clean contact information, service type, preferred date, and any notes required for dispatch or preparation.</p>
+            <ul>
+              <li>VA verifies the calendar, appointment type, and custom form fields.</li>
+              <li>VA confirms that the client-facing booking form collects the minimum required information.</li>
+              <li>Common risks: missing phone number, inconsistent service names, wrong appointment type selection.</li>
+            </ul>
+          </article>
+          <article class="module">
+            <div class="phase">Step 2</div>
+            <h3>Zap #1 validates and routes the booking</h3>
+            <p>Zapier receives the new appointment trigger, checks the payload, and routes it into Jobber. Optional logic can include filters, formatters, or duplicate checks before the record is created.</p>
+            <ul>
+              <li>VA learns how field mapping works from Acuity to Jobber.</li>
+              <li>VA reviews task history to make sure the run completed.</li>
+              <li>Common risks: broken field mapping, empty required values, outdated authentication.</li>
+            </ul>
+          </article>
+          <article class="module">
+            <div class="phase">Step 3</div>
+            <h3>Jobber becomes the working operations record</h3>
+            <p>Once the Zap runs, Jobber holds the record the team will work from. The exact record can be a client, request, quote, or job based on the company’s service model.</p>
+            <ul>
+              <li>VA checks whether the correct object was created.</li>
+              <li>VA validates essential fields like client name, phone, email, address, and requested service.</li>
+              <li>VA checks if the record belongs to the right workflow stage or assignee.</li>
+            </ul>
+          </article>
+          <article class="module">
+            <div class="phase">Step 4</div>
+            <h3>Zap #2 logs the operational result to Google Sheets</h3>
+            <p>The second Zap listens for the chosen Jobber event and creates or updates a row in Google Sheets. This sheet becomes the daily visibility tool for leadership and the VA.</p>
+            <ul>
+              <li>VA confirms the row is created only once and in the correct columns.</li>
+              <li>VA checks the status tags and timestamps.</li>
+              <li>VA uses the sheet for daily reconciliation and management reporting.</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="right-column">
+          <article class="note-box">
+            <h3>Recommended operating model</h3>
+            <p style="margin-bottom:14px;">Use this process for the CEO demo because it is easy to explain and scales cleanly:</p>
+            <div class="mini-flow">
+              <div class="mini-step">
+                <div>
+                  <strong>Zap #1: Intake to operations</strong>
+                  <small>Trigger: New appointment in Acuity</small>
+                </div>
+                <span class="tag">Create/Update Jobber</span>
+              </div>
+              <div class="mini-step">
+                <div>
+                  <strong>Manual or automated QA check</strong>
+                  <small>VA reviews task history and Jobber landing</small>
+                </div>
+                <span class="tag warn">Validation</span>
+              </div>
+              <div class="mini-step">
+                <div>
+                  <strong>Zap #2: Operations to reporting</strong>
+                  <small>Trigger: Jobber event such as new client, quote, or job</small>
+                </div>
+                <span class="tag">Update Sheets</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="qa-card">
+            <h3>Why leadership will like this structure</h3>
+            <ul>
+              <li>The workflow is easy to explain in one screen.</li>
+              <li>It separates operational execution from reporting.</li>
+              <li>It gives the VA a visible checklist and not just a hidden automation.</li>
+              <li>It creates a clean audit trail in Google Sheets for QA and coaching.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>VA responsibility map</h2>
+          <p>The VA is not just clicking buttons. The VA is the human quality checkpoint that protects the automation and keeps the business confident in the data.</p>
+        </div>
+      </div>
+      <div class="roles-grid">
+        <article class="role-card">
+          <h3>Platform setup support</h3>
+          <p>Understand where the trigger starts, what account is connected, and which spreadsheet or Jobber workflow is being used.</p>
+          <ul>
+            <li>Confirm connected accounts</li>
+            <li>Check calendar and form fields</li>
+            <li>Validate spreadsheet destination</li>
+          </ul>
+        </article>
+        <article class="role-card">
+          <h3>Daily monitoring</h3>
+          <p>Review Zap history, spot failures, compare Jobber entries against the booking source, and make sure the reporting sheet is current.</p>
+          <ul>
+            <li>Review failed tasks</li>
+            <li>Reconcile booking count vs sheet rows</li>
+            <li>Escalate recurring issues</li>
+          </ul>
+        </article>
+        <article class="role-card">
+          <h3>Exception handling</h3>
+          <p>Know what to do when a phone number is missing, an appointment is duplicated, a Jobber record is incomplete, or a row fails to write into Sheets.</p>
+          <ul>
+            <li>Apply the error playbook</li>
+            <li>Log the issue and resolution</li>
+            <li>Notify the right owner</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="training">
+      <div class="section-head">
+        <div>
+          <h2>5-day in-depth training plan for the VA</h2>
+          <p>This version is presentation-ready and focused on process mastery, not just tool familiarity.</p>
+        </div>
+      </div>
+      <div class="training-grid">
+        <article class="day-card">
+          <div class="day">Day 1</div>
+          <h3>Business context and tool orientation</h3>
+          <p>Teach why the automation exists and how each platform supports the client journey.</p>
+          <ul>
+            <li>Understand the end-to-end customer flow</li>
+            <li>Review Acuity, Zapier, Jobber, and Google Sheets roles</li>
+            <li>Identify trigger vs action vs output</li>
+            <li>Walk through the CEO-facing demo story</li>
+          </ul>
+        </article>
+        <article class="day-card">
+          <div class="day">Day 2</div>
+          <h3>Acuity intake logic and source data quality</h3>
+          <p>Train the VA to protect data quality at the source so the automation has a clean trigger payload.</p>
+          <ul>
+            <li>Review appointment types and custom intake fields</li>
+            <li>Define required client information</li>
+            <li>Practice spotting weak bookings before they cause downstream issues</li>
+            <li>Review reschedule and cancellation scenarios</li>
+          </ul>
+        </article>
+        <article class="day-card">
+          <div class="day">Day 3</div>
+          <h3>Zapier logic, testing, and monitoring</h3>
+          <p>Train the VA to read the automation like a workflow owner, not like a passive user.</p>
+          <ul>
+            <li>Understand trigger test, action test, and field mapping</li>
+            <li>Learn basic filters and formatting concepts</li>
+            <li>Read task history and identify common failure causes</li>
+            <li>Practice re-testing with sample data</li>
+          </ul>
+        </article>
+        <article class="day-card">
+          <div class="day">Day 4</div>
+          <h3>Jobber validation and Sheets reconciliation</h3>
+          <p>Train the VA to verify if the automation created the correct operational output and reporting log.</p>
+          <ul>
+            <li>Confirm if the right Jobber object was created</li>
+            <li>Check field completeness and operational readiness</li>
+            <li>Review sheet columns, status tags, and timestamps</li>
+            <li>Practice daily reconciliation checklist</li>
+          </ul>
+        </article>
+        <article class="day-card">
+          <div class="day">Day 5</div>
+          <h3>Simulation, QA, and final presentation</h3>
+          <p>End with demo practice, issue handling, and a clear explanation the VA can deliver to leadership.</p>
+          <ul>
+            <li>Run good and bad scenario simulations</li>
+            <li>Use the escalation matrix</li>
+            <li>Explain the automation in simple executive language</li>
+            <li>Complete final skills check and SOP review</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>Key quality controls</h2>
+          <p>These are the controls the VA should check every day to keep the automation trustworthy.</p>
+        </div>
+      </div>
+      <div class="checklist">
+        <div class="checklist-list">
+          <div class="check-item"><div class="check-icon">✓</div><div><strong>Field completeness</strong><br><span style="color:var(--muted)">Name, email, phone, date, service type, and notes must exist before the record is routed.</span></div></div>
+          <div class="check-item"><div class="check-icon">✓</div><div><strong>Correct record type in Jobber</strong><br><span style="color:var(--muted)">The automation must create the exact operational object approved by the business workflow.</span></div></div>
+          <div class="check-item"><div class="check-icon">✓</div><div><strong>Duplicate prevention</strong><br><span style="color:var(--muted)">The VA should watch for repeated records caused by re-tests, edits, or duplicate submissions.</span></div></div>
+        </div>
+        <div class="checklist-list">
+          <div class="check-item"><div class="check-icon">✓</div><div><strong>Task history review</strong><br><span style="color:var(--muted)">Failed or halted Zap runs should be reviewed daily and documented.</span></div></div>
+          <div class="check-item"><div class="check-icon">✓</div><div><strong>Reporting sheet reconciliation</strong><br><span style="color:var(--muted)">The number of operational events should match the rows or updates in the Google Sheet.</span></div></div>
+          <div class="check-item"><div class="check-icon">✓</div><div><strong>Escalation timing</strong><br><span style="color:var(--muted)">If the issue affects client delivery, the VA escalates immediately instead of waiting for end-of-day review.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>Success metrics leadership can use</h2>
+          <p>These metrics help the CEO see the value of the automation and the VA’s role in protecting it.</p>
+        </div>
+      </div>
+      <div class="metrics-grid">
+        <article class="metric-card">
+          <h3>98%+</h3>
+          <p>Successful automation completion rate across both Zaps.</p>
+        </article>
+        <article class="metric-card">
+          <h3>&lt;15 min</h3>
+          <p>Target time for the VA to identify and escalate failed client-impacting automations.</p>
+        </article>
+        <article class="metric-card">
+          <h3>Daily</h3>
+          <p>Reconciliation between Acuity bookings, Jobber records, and Google Sheets logs.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <h2>Scenario-based coaching cases</h2>
+          <p>Use these during training so the VA learns how to think, not just what to click.</p>
+        </div>
+      </div>
+      <div class="scenarios-grid">
+        <article class="scenario-card">
+          <h3>Scenario 1 — Missing phone number</h3>
+          <p>The booking comes in from Acuity, but the phone field is blank. Teach the VA what should stop, what can continue, and who should be notified.</p>
+          <ul>
+            <li>Check if the field is truly required</li>
+            <li>Decide whether to proceed or hold</li>
+            <li>Document the exception in the tracker</li>
+          </ul>
+        </article>
+        <article class="scenario-card">
+          <h3>Scenario 2 — Duplicate Jobber record</h3>
+          <p>A second record is created because the Zap was tested again. Train the VA to identify the duplicate source and prevent repeat errors.</p>
+          <ul>
+            <li>Compare timestamps and source IDs</li>
+            <li>Confirm which record is valid</li>
+            <li>Log root cause and cleanup action</li>
+          </ul>
+        </article>
+        <article class="scenario-card">
+          <h3>Scenario 3 — Google Sheet not updated</h3>
+          <p>Jobber has the record, but the management log is missing. Teach the VA to isolate whether the problem is in the trigger, the action, or permissions.</p>
+          <ul>
+            <li>Verify the Jobber event actually fired</li>
+            <li>Review Zapier history</li>
+            <li>Escalate if the reporting log is business-critical</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="simulator">
+      <div class="section-head">
+        <div>
+          <h2>Interactive automation demo</h2>
+          <p>Use this during the CEO presentation to simulate how a booking flows through the system. You can run a successful example or trigger a failure scenario to explain QA and escalation.</p>
+        </div>
+      </div>
+      <div class="sim-layout">
+        <article class="sim-card">
+          <h3>Demo input</h3>
+          <p style="margin-bottom:16px;">Enter a sample booking like a VA would receive from Acuity.</p>
+          <div class="form-grid">
+            <label>Client name
+              <input id="clientName" value="Jamie Rivera" />
+            </label>
+            <label>Email address
+              <input id="clientEmail" value="jamie.rivera@email.com" />
+            </label>
+            <label>Phone number
+              <input id="clientPhone" value="555-214-7789" />
+            </label>
+            <label>Service type
+              <select id="serviceType">
+                <option>Initial Consultation</option>
+                <option>On-Site Estimate</option>
+                <option>Follow-Up Visit</option>
+                <option>Recurring Service</option>
+              </select>
+            </label>
+            <label>Appointment date
+              <input id="apptDate" value="2026-05-05 09:30 AM" />
+            </label>
+            <label>Scenario mode
+              <select id="scenarioMode">
+                <option value="success">Success path</option>
+                <option value="failMissingPhone">Failure: Missing phone</option>
+                <option value="failSheet">Failure: Sheet write issue</option>
+              </select>
+            </label>
+          </div>
+          <div class="button-row">
+            <button class="btn primary" id="runDemo">Run Automation</button>
+            <button class="btn" id="resetDemo">Reset</button>
+          </div>
+        </article>
+
+        <div class="sim-visual">
+          <div class="pipeline" id="pipeline">
+            <article class="pipe-node" data-step="acuity">
+              <div class="flow-icon acuity">AC</div>
+              <h4>Acuity Booking</h4>
+              <p>Client creates the appointment and submits intake data.</p>
+              <div class="step-status">Waiting</div>
+            </article>
+            <article class="pipe-node" data-step="zap1">
+              <div class="flow-icon zapier">Z1</div>
+              <h4>Zap #1</h4>
+              <p>Validates fields and routes the booking to Jobber.</p>
+              <div class="step-status">Waiting</div>
+            </article>
+            <article class="pipe-node" data-step="jobber">
+              <div class="flow-icon jobber">JB</div>
+              <h4>Jobber Record</h4>
+              <p>Creates the operational record for the team.</p>
+              <div class="step-status">Waiting</div>
+            </article>
+            <article class="pipe-node" data-step="zap2">
+              <div class="flow-icon zapier">Z2</div>
+              <h4>Zap #2</h4>
+              <p>Pushes the Jobber event into the reporting tracker.</p>
+              <div class="step-status">Waiting</div>
+            </article>
+            <article class="pipe-node" data-step="sheets">
+              <div class="flow-icon sheets">GS</div>
+              <h4>Google Sheets Log</h4>
+              <p>Creates the final audit row used by leadership and QA.</p>
+              <div class="step-status">Waiting</div>
+            </article>
+          </div>
+
+          <div class="console">
+            <div class="console-header">
+              <h3 style="margin:0;">Automation task history</h3>
+              <span class="tag" id="demoStatus">Idle</span>
+            </div>
+            <div class="console-lines" id="consoleLines">
+              <div class="console-line" style="opacity:1;transform:none;animation:none;">System ready. Run the demo to simulate the automation workflow.</div>
+            </div>
+          </div>
+
+          <div class="sheet">
+            <div class="sheet-header">
+              <h3 style="margin:0;">Mock Google Sheets tracker</h3>
+              <span class="tag success" id="sheetState">Ready</span>
+            </div>
+            <div style="overflow:auto;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Client</th>
+                    <th>Service</th>
+                    <th>Jobber Status</th>
+                    <th>Automation Result</th>
+                  </tr>
+                </thead>
+                <tbody id="sheetBody">
+                  <tr>
+                    <td>—</td>
+                    <td>No data yet</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><span class="tag">Awaiting run</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <strong>Presentation note:</strong> this demo models a practical no-code workflow for VA training and executive presentation. It can be customized further once the final Jobber object and spreadsheet schema are confirmed.
+    </div>
+  </main>
+
+  <script>
+    const nodes = {
+      acuity: document.querySelector('[data-step="acuity"]'),
+      zap1: document.querySelector('[data-step="zap1"]'),
+      jobber: document.querySelector('[data-step="jobber"]'),
+      zap2: document.querySelector('[data-step="zap2"]'),
+      sheets: document.querySelector('[data-step="sheets"]')
+    };
+
+    const runBtn = document.getElementById('runDemo');
+    const resetBtn = document.getElementById('resetDemo');
+    const consoleLines = document.getElementById('consoleLines');
+    const demoStatus = document.getElementById('demoStatus');
+    const sheetBody = document.getElementById('sheetBody');
+    const sheetState = document.getElementById('sheetState');
+
+    let running = false;
+
+    function setStatus(nodeKey, status, text) {
+      const node = nodes[nodeKey];
+      node.classList.remove('active', 'done', 'fail');
+      if (status === 'active') node.classList.add('active');
+      if (status === 'done') node.classList.add('done');
+      if (status === 'fail') node.classList.add('fail');
+      node.querySelector('.step-status').textContent = text;
+    }
+
+    function logLine(text) {
+      const line = document.createElement('div');
+      line.className = 'console-line';
+      line.textContent = text;
+      consoleLines.prepend(line);
+    }
+
+    function resetNodes() {
+      Object.keys(nodes).forEach(key => setStatus(key, '', 'Waiting'));
+    }
+
+    function resetDemo() {
+      running = false;
+      resetNodes();
+      demoStatus.textContent = 'Idle';
+      demoStatus.className = 'tag';
+      sheetState.textContent = 'Ready';
+      sheetState.className = 'tag success';
+      consoleLines.innerHTML = '<div class="console-line" style="opacity:1;transform:none;animation:none;">System ready. Run the demo to simulate the automation workflow.</div>';
+      sheetBody.innerHTML = `
+        <tr>
+          <td>—</td>
+          <td>No data yet</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="tag">Awaiting run</span></td>
+        </tr>`;
+    }
+
+    function getFormData() {
+      return {
+        name: document.getElementById('clientName').value.trim() || 'Unknown Client',
+        email: document.getElementById('clientEmail').value.trim() || 'missing@email.com',
+        phone: document.getElementById('clientPhone').value.trim(),
+        service: document.getElementById('serviceType').value,
+        date: document.getElementById('apptDate').value.trim() || 'No date',
+        mode: document.getElementById('scenarioMode').value
+      };
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function runDemo() {
+      if (running) return;
+      running = true;
+      resetDemo();
+      const data = getFormData();
+
+      if (data.mode === 'failMissingPhone') {
+        data.phone = '';
+      }
+
+      demoStatus.textContent = 'Running';
+      demoStatus.className = 'tag warn';
+      logLine(`Starting workflow for ${data.name} • ${data.service} • ${data.date}`);
+
+      setStatus('acuity', 'active', 'Triggering');
+      logLine('Acuity: New appointment captured.');
+      await sleep(900);
+      setStatus('acuity', 'done', 'Captured');
+
+      setStatus('zap1', 'active', 'Validating');
+      logLine('Zap #1: Checking required fields and mapping appointment data...');
+      await sleep(1100);
+
+      if (!data.phone) {
+        setStatus('zap1', 'fail', 'Validation failed');
+        demoStatus.textContent = 'Needs Review';
+        demoStatus.className = 'tag fail';
+        sheetState.textContent = 'No write';
+        sheetState.className = 'tag fail';
+        logLine('Error: Phone number is missing. VA should hold the record, document the issue, and escalate if required.');
+        sheetBody.innerHTML = `
+          <tr>
+            <td>${new Date().toLocaleString()}</td>
+            <td>${data.name}</td>
+            <td>${data.service}</td>
+            <td><span class="tag warn">Held</span></td>
+            <td><span class="tag fail">Missing phone</span></td>
+          </tr>`;
+        running = false;
+        return;
+      }
+
+      setStatus('zap1', 'done', 'Validated');
+      setStatus('jobber', 'active', 'Creating record');
+      logLine('Zap #1: Payload approved. Sending booking to Jobber...');
+      await sleep(1000);
+      setStatus('jobber', 'done', 'Created');
+      logLine(`Jobber: ${data.name} created as an operational record for ${data.service}.`);
+
+      setStatus('zap2', 'active', 'Listening');
+      logLine('Zap #2: Jobber event detected. Preparing reporting payload for Google Sheets...');
+      await sleep(1000);
+
+      if (data.mode === 'failSheet') {
+        setStatus('zap2', 'done', 'Prepared');
+        setStatus('sheets', 'fail', 'Write failed');
+        demoStatus.textContent = 'Partial Success';
+        demoStatus.className = 'tag warn';
+        sheetState.textContent = 'Permission issue';
+        sheetState.className = 'tag fail';
+        logLine('Google Sheets action failed. Possible causes: expired permissions, wrong tab name, or protected range.');
+        sheetBody.innerHTML = `
+          <tr>
+            <td>${new Date().toLocaleString()}</td>
+            <td>${data.name}</td>
+            <td>${data.service}</td>
+            <td><span class="tag success">Created in Jobber</span></td>
+            <td><span class="tag warn">Sheet failed</span></td>
+          </tr>`;
+        running = false;
+        return;
+      }
+
+      setStatus('zap2', 'done', 'Approved');
+      setStatus('sheets', 'active', 'Writing row');
+      await sleep(900);
+      setStatus('sheets', 'done', 'Logged');
+      demoStatus.textContent = 'Complete';
+      demoStatus.className = 'tag success';
+      sheetState.textContent = 'Updated';
+      sheetState.className = 'tag success';
+      logLine('Google Sheets: Tracker row created successfully. Workflow completed end-to-end.');
+
+      sheetBody.innerHTML = `
+        <tr>
+          <td>${new Date().toLocaleString()}</td>
+          <td>
+            <strong>${data.name}</strong><br>
+            <span style="color:var(--muted)">${data.email}</span>
+          </td>
+          <td>${data.service}<br><span style="color:var(--muted)">${data.date}</span></td>
+          <td><span class="tag success">Created</span></td>
+          <td><span class="tag success">Success</span></td>
+        </tr>`;
+
+      running = false;
+    }
+
+    runBtn.addEventListener('click', runDemo);
+    resetBtn.addEventListener('click', resetDemo);
+  </script>
+</body>
+</html>
