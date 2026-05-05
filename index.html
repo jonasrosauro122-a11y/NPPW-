@@ -3,540 +3,1388 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NPPW | VA Operations System Visual Workflow</title>
+  <title>NPPW + MPP Interactive Training Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#07111f;
-      --bg2:#0d1930;
-      --panel:rgba(255,255,255,.08);
-      --panel2:rgba(255,255,255,.05);
+    :root {
+      --bg-1:#040814;
+      --bg-2:#0a1630;
+      --bg-3:#13274d;
+      --glass:rgba(255,255,255,.09);
+      --glass-2:rgba(255,255,255,.06);
       --line:rgba(255,255,255,.12);
-      --text:#f6f8fb;
-      --muted:#bfd0e3;
-      --blue:#59b0ff;
-      --cyan:#64e3ff;
-      --green:#87efb4;
-      --yellow:#ffd76f;
-      --red:#ff9b98;
-      --purple:#b89bff;
-      --shadow:0 24px 60px rgba(0,0,0,.35);
-      --radius:24px;
+      --text:#eff6ff;
+      --muted:#bfd1ee;
+      --cyan:#22d3ee;
+      --violet:#8b5cf6;
+      --pink:#fb7185;
+      --green:#4ade80;
+      --amber:#fbbf24;
+      --red:#fb7185;
+      --shadow:0 28px 60px rgba(0,0,0,.34);
+      --radius-xl:28px;
+      --radius-lg:22px;
+      --radius-md:18px;
     }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
       margin:0;
-      font-family:Inter,Segoe UI,Arial,sans-serif;
+      font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       color:var(--text);
       background:
-        radial-gradient(circle at 10% 20%, rgba(89,176,255,.18), transparent 0 28%),
-        radial-gradient(circle at 90% 10%, rgba(100,227,255,.1), transparent 0 24%),
-        radial-gradient(circle at 80% 80%, rgba(135,239,180,.12), transparent 0 18%),
-        linear-gradient(135deg,var(--bg),#0a1424 38%,var(--bg2));
+        radial-gradient(circle at 18% 18%, rgba(34,211,238,.14), transparent 22%),
+        radial-gradient(circle at 85% 10%, rgba(139,92,246,.18), transparent 22%),
+        radial-gradient(circle at 20% 85%, rgba(251,113,133,.16), transparent 24%),
+        linear-gradient(135deg,var(--bg-1), var(--bg-2), var(--bg-3));
       min-height:100vh;
       overflow-x:hidden;
     }
-    .orb,.orb2{position:fixed;border-radius:999px;filter:blur(80px);pointer-events:none;z-index:0;opacity:.48;animation:floaty 14s ease-in-out infinite}
-    .orb{width:280px;height:280px;background:rgba(89,176,255,.26);top:60px;right:-50px}
-    .orb2{width:240px;height:240px;background:rgba(135,239,180,.16);bottom:40px;left:-20px;animation-delay:-6s}
-    @keyframes floaty{0%,100%{transform:translateY(0) translateX(0)}50%{transform:translateY(14px) translateX(-10px)}}
-    .wrap{position:relative;z-index:1;width:min(1260px,calc(100% - 28px));margin:0 auto;padding:20px 0 60px}
-    .topbar{
-      position:sticky;top:14px;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;
-      padding:14px 18px;margin:8px auto 22px;background:rgba(6,14,25,.74);backdrop-filter:blur(14px);
-      border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)
+    body::before {
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size:34px 34px;
+      mask-image:linear-gradient(to bottom, rgba(0,0,0,.55), transparent 92%);
+      pointer-events:none;
+      opacity:.28;
+      z-index:0;
     }
-    .brand{display:flex;align-items:center;gap:14px;min-width:0}
-    .badge{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(89,176,255,.26),rgba(135,239,180,.18));border:1px solid rgba(255,255,255,.14);font-weight:800;letter-spacing:.08em}
-    .brand h1{margin:0;font-size:1rem;letter-spacing:.05em;text-transform:uppercase}
-    .brand p{margin:4px 0 0;color:var(--muted);font-size:.92rem}
-    .nav{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
-    .nav a,.btn{
-      text-decoration:none;color:var(--text);padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.11);
-      background:rgba(255,255,255,.05);font-size:.92rem;transition:.2s ease;display:inline-flex;align-items:center;gap:8px
+    .mesh {
+      position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:0;
     }
-    .nav a:hover,.btn:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.24);background:rgba(255,255,255,.09)}
-    .hero{display:grid;grid-template-columns:1.2fr .95fr;gap:22px;align-items:stretch}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-    .hero-copy{padding:34px}
-    .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:999px;background:rgba(99,227,255,.1);border:1px solid rgba(99,227,255,.2);font-size:.84rem;color:#d7f7ff;letter-spacing:.04em;text-transform:uppercase}
-    .hero h2{margin:16px 0 12px;font-size:clamp(2rem,3vw,3.6rem);line-height:1.02}
-    .hero p{margin:0;color:var(--muted);font-size:1.02rem;line-height:1.7}
-    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
-    .btn-primary{background:linear-gradient(135deg,rgba(89,176,255,.28),rgba(135,239,180,.18));border-color:rgba(255,255,255,.16)}
-    .impact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:22px}
-    .impact{padding:18px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
-    .impact strong{display:block;font-size:1.9rem;margin-bottom:8px}
-    .impact span{display:block;color:var(--muted);line-height:1.5}
-
-    .section{margin-top:24px}
-    .section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:14px}
-    .section-head h3{margin:0;font-size:1.5rem}
-    .section-head p{margin:6px 0 0;color:var(--muted)}
-
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .mini{padding:22px}
-    .mini h4{margin:0 0 10px;font-size:1.05rem}
-    .mini p,.mini li{color:var(--muted);line-height:1.6}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:.8rem;color:#dceaf8;margin-bottom:12px}
-
-    .flow-card{padding:24px;overflow:hidden}
-    .lane-labels{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-    .lane-labels span{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-size:.84rem;color:#d7e6f5}
-    .flow-scroll{overflow-x:auto;padding-bottom:8px}
-    .flow{display:flex;gap:18px;min-width:1120px;align-items:stretch}
-    .step{position:relative;flex:1;min-width:160px;padding:18px;border-radius:24px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09)}
-    .step:not(:last-child)::after{content:"→";position:absolute;right:-15px;top:50%;transform:translateY(-50%);font-size:1.4rem;color:rgba(255,255,255,.55)}
-    .step .num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:.9rem;font-weight:800;background:linear-gradient(135deg,rgba(89,176,255,.28),rgba(135,239,180,.18));border:1px solid rgba(255,255,255,.14);margin-bottom:12px}
-    .step h4{margin:0 0 10px;font-size:1.02rem}
-    .step p{margin:0 0 10px;color:var(--muted);line-height:1.55;font-size:.94rem}
-    .step ul{padding-left:18px;margin:0;color:var(--muted)}
-    .step li{margin:6px 0;line-height:1.45}
-
-    .swim-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
-    .list-card{padding:22px}
-    .checklist{display:grid;gap:10px}
-    .check{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
-    .check b{display:block;margin-bottom:4px}
-    .check span{color:var(--muted);font-size:.94rem;line-height:1.45}
-    .dot{width:12px;height:12px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(135,239,180,.12);margin-top:6px;flex:0 0 auto}
-    .dot.warn{background:var(--yellow);box-shadow:0 0 0 5px rgba(255,215,111,.12)}
-    .dot.red{background:var(--red);box-shadow:0 0 0 5px rgba(255,155,152,.12)}
-
-    .roles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-    .role{padding:18px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
-    .role h4{margin:0 0 8px}
-    .role p{margin:0;color:var(--muted);line-height:1.55;font-size:.95rem}
-
-    .sim-wrap{display:grid;grid-template-columns:1fr .95fr;gap:18px}
-    .sim-panel{padding:24px}
-    .controls{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0 18px}
-    .tagbtn{cursor:pointer;padding:10px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.11);background:rgba(255,255,255,.05);color:var(--text);font-size:.92rem;transition:.2s ease}
-    .tagbtn.active,.tagbtn:hover{background:rgba(255,255,255,.11);transform:translateY(-1px)}
-    .console{padding:16px;border-radius:18px;background:#07111d;border:1px solid rgba(255,255,255,.08);min-height:340px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.92rem;line-height:1.55;white-space:pre-wrap;color:#d6e7f7}
-    .summary-box{padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);margin-top:12px}
-    .summary-box h4{margin:0 0 8px}
-    .summary-box p{margin:0;color:var(--muted);line-height:1.6}
-
-    .timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
-    .phase{padding:18px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
-    .phase strong{display:block;margin-bottom:8px;font-size:.95rem;color:#d7e7f9}
-    .phase h4{margin:0 0 10px;font-size:1rem}
-    .phase p{margin:0;color:var(--muted);line-height:1.55;font-size:.94rem}
-
-    footer{margin-top:28px;padding:22px;border-radius:24px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--muted)}
-    footer strong{color:var(--text)}
-
-    @media (max-width:1100px){
-      .hero,.swim-grid,.sim-wrap,.grid-3,.roles,.timeline{grid-template-columns:1fr}
-      .impact-grid{grid-template-columns:repeat(2,1fr)}
+    .blob {
+      position:absolute; border-radius:999px; filter:blur(90px); opacity:.22; animation:floatBlob 16s ease-in-out infinite;
     }
-    @media (max-width:760px){
-      .wrap{width:min(100% - 18px,1260px)}
-      .topbar{padding:12px;flex-direction:column;align-items:flex-start}
-      .hero-copy,.flow-card,.list-card,.sim-panel,.mini{padding:18px}
-      .impact-grid{grid-template-columns:1fr}
-      .nav{justify-content:flex-start}
-      .roles{grid-template-columns:1fr}
-      .section-head{flex-direction:column;align-items:flex-start}
+    .blob.one { width:360px; height:360px; top:40px; right:2%; background:var(--cyan); }
+    .blob.two { width:420px; height:420px; bottom:5%; left:-8%; background:var(--violet); animation-delay:-5s; }
+    .blob.three { width:260px; height:260px; bottom:25%; right:18%; background:var(--pink); animation-delay:-9s; }
+    @keyframes floatBlob {
+      0%,100% { transform:translate3d(0,0,0) scale(1); }
+      50% { transform:translate3d(0,-22px,0) scale(1.08); }
+    }
+    .app {
+      position:relative;
+      z-index:1;
+      min-height:100vh;
+      display:grid;
+      grid-template-columns:330px 1fr;
+    }
+    .sidebar {
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow:auto;
+      padding:18px;
+      border-right:1px solid rgba(255,255,255,.08);
+      background:rgba(3,7,17,.42);
+      backdrop-filter:blur(16px);
+    }
+    .main {
+      padding:20px;
+    }
+    .glass {
+      background:var(--glass);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(18px);
+      border-radius:var(--radius-xl);
+    }
+    .brand {
+      padding:20px;
+      position:relative;
+      overflow:hidden;
+      margin-bottom:14px;
+    }
+    .brand::after {
+      content:"";
+      position:absolute;
+      inset:auto -20% -45% auto;
+      width:220px;
+      height:220px;
+      border-radius:999px;
+      background:radial-gradient(circle, rgba(34,211,238,.22), transparent 72%);
+    }
+    .eyebrow {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      color:#dbeafe;
+      font-size:.78rem;
+      margin-bottom:12px;
+      letter-spacing:.02em;
+    }
+    .dot {
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:linear-gradient(135deg,var(--cyan),var(--violet));
+      box-shadow:0 0 0 4px rgba(34,211,238,.12);
+    }
+    .brand h1 {
+      margin:0 0 10px;
+      font-size:1.35rem;
+      line-height:1.18;
+    }
+    .brand p {
+      margin:0;
+      color:var(--muted);
+      line-height:1.68;
+      font-size:.93rem;
+    }
+    .card {
+      padding:18px;
+      margin-bottom:14px;
+    }
+    .small-muted {
+      color:var(--muted);
+      font-size:.87rem;
+      line-height:1.55;
+    }
+    .module-list {
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .module-btn {
+      width:100%;
+      text-align:left;
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);
+      padding:15px 14px;
+      border-radius:18px;
+      cursor:pointer;
+      transition:transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .module-btn:hover:not([disabled]) {
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.08);
+      border-color:rgba(255,255,255,.18);
+    }
+    .module-btn.active {
+      background:linear-gradient(135deg, rgba(34,211,238,.2), rgba(139,92,246,.23));
+      border-color:rgba(139,92,246,.5);
+      box-shadow:0 12px 30px rgba(64, 91, 255, .18);
+    }
+    .module-btn[disabled] {
+      opacity:.46;
+      cursor:not-allowed;
+    }
+    .module-status {
+      display:block;
+      margin-top:6px;
+      font-size:.79rem;
+      color:var(--muted);
+    }
+    .ring-grid {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:14px;
+    }
+    .ring-card {
+      padding:14px;
+      border-radius:18px;
+      background:var(--glass-2);
+      border:1px solid rgba(255,255,255,.09);
+      text-align:center;
+    }
+    .ring {
+      --pct:0;
+      width:84px;
+      height:84px;
+      margin:0 auto 10px;
+      border-radius:50%;
+      background:
+        radial-gradient(closest-side, rgba(8,12,24,.95) 75%, transparent 76% 100%),
+        conic-gradient(var(--cyan) calc(var(--pct) * 1%), rgba(255,255,255,.08) 0);
+      display:grid;
+      place-items:center;
+      position:relative;
+    }
+    .ring.alt {
+      background:
+        radial-gradient(closest-side, rgba(8,12,24,.95) 75%, transparent 76% 100%),
+        conic-gradient(var(--violet) calc(var(--pct) * 1%), rgba(255,255,255,.08) 0);
+    }
+    .ring span {
+      font-weight:800;
+      font-size:1rem;
+    }
+    .hero {
+      padding:24px;
+      overflow:hidden;
+      position:relative;
+    }
+    .hero::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(110deg, rgba(34,211,238,.08), transparent 40%, rgba(139,92,246,.08));
+      pointer-events:none;
+    }
+    .hero-grid {
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+      position:relative;
+      z-index:1;
+    }
+    .hero h2 {
+      margin:6px 0 10px;
+      font-size:2.15rem;
+      line-height:1.08;
+      letter-spacing:-.03em;
+    }
+    .hero p {
+      margin:0;
+      color:var(--muted);
+      line-height:1.78;
+      max-width:760px;
+    }
+    .chips {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+    .chip {
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      font-size:.84rem;
+    }
+    .hero-actions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+    .btn {
+      border:1px solid rgba(255,255,255,.15);
+      color:var(--text);
+      background:linear-gradient(135deg, rgba(34,211,238,.18), rgba(139,92,246,.22));
+      padding:12px 15px;
+      border-radius:15px;
+      font-weight:800;
+      cursor:pointer;
+      transition:transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+    .btn:hover {
+      transform:translateY(-2px);
+      box-shadow:0 12px 26px rgba(34,211,238,.18);
+    }
+    .btn.alt {
+      background:rgba(255,255,255,.06);
+    }
+    .btn.ghost {
+      background:transparent;
+    }
+    .hero-side {
+      display:grid;
+      gap:12px;
+    }
+    .stats-grid {
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+    }
+    .stat {
+      padding:16px;
+      border-radius:20px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1);
+      position:relative;
+      overflow:hidden;
+    }
+    .stat::after {
+      content:"";
+      position:absolute;
+      inset:auto auto -30px -20px;
+      width:110px;
+      height:110px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.08), transparent 68%);
+      pointer-events:none;
+    }
+    .stat-value {
+      font-size:1.8rem;
+      font-weight:900;
+      margin-bottom:6px;
+      letter-spacing:-.03em;
+    }
+    .profile-card {
+      padding:18px;
+      border-radius:22px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+    }
+    .profile-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    label {
+      display:block;
+      font-size:.83rem;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+    input[type="text"], input[type="email"] {
+      width:100%;
+      border-radius:14px;
+      padding:12px 13px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.08);
+      color:var(--text);
+      outline:none;
+    }
+    input[type="text"]::placeholder, input[type="email"]::placeholder {
+      color:#b6c7e2;
+    }
+    .banner {
+      margin-top:14px;
+      padding:14px;
+      border-radius:18px;
+      background:linear-gradient(135deg, rgba(34,211,238,.12), rgba(139,92,246,.12));
+      border:1px solid rgba(139,92,246,.22);
+      color:#e6f4ff;
+      line-height:1.6;
+      font-size:.9rem;
+    }
+    .top-progress {
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:16px;
+      margin-top:18px;
+    }
+    .progress-card {
+      padding:18px;
+    }
+    .progress-line {
+      height:12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      overflow:hidden;
+      margin-top:12px;
+    }
+    .progress-fill {
+      height:100%;
+      width:0;
+      background:linear-gradient(90deg, var(--cyan), var(--violet), var(--pink));
+      border-radius:999px;
+      transition:width .35s ease;
+    }
+    .panel-grid {
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    .panel {
+      padding:22px;
+      min-height:220px;
+    }
+    .panel h3 {
+      margin:0 0 12px;
+      font-size:1.08rem;
+    }
+    .panel p {
+      color:var(--muted);
+      line-height:1.78;
+    }
+    .tabs {
+      margin-top:18px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .tab-btn {
+      padding:11px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:700;
+    }
+    .tab-btn.active {
+      background:linear-gradient(135deg, rgba(34,211,238,.2), rgba(139,92,246,.2));
+      border-color:rgba(139,92,246,.3);
+      box-shadow:0 10px 24px rgba(139,92,246,.14);
+    }
+    .hidden { display:none !important; }
+    .stack {
+      display:grid;
+      gap:12px;
+    }
+    .item-card {
+      padding:15px 16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.09);
+      color:var(--muted);
+      line-height:1.72;
+    }
+    .item-card strong {
+      color:var(--text);
+    }
+    .faq {
+      border-radius:18px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.09);
+      overflow:hidden;
+    }
+    .faq + .faq {
+      margin-top:10px;
+    }
+    .faq button {
+      width:100%;
+      border:0;
+      background:transparent;
+      color:var(--text);
+      padding:16px;
+      text-align:left;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      cursor:pointer;
+      font-size:1rem;
+      font-weight:700;
+    }
+    .faq .answer {
+      display:none;
+      padding:0 16px 16px;
+      color:var(--muted);
+      line-height:1.75;
+    }
+    .faq.open .answer {
+      display:block;
+    }
+    .interactive-grid {
+      display:grid;
+      gap:12px;
+    }
+    .accuracy-card, .qcard {
+      padding:17px;
+      border-radius:18px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+      position:relative;
+      overflow:hidden;
+    }
+    .accuracy-card::after, .qcard::after {
+      content:"";
+      position:absolute;
+      inset:auto -32px -32px auto;
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.06), transparent 70%);
+      pointer-events:none;
+    }
+    .accuracy-card h4, .qcard h4 {
+      margin:0 0 12px;
+      font-size:1rem;
+      line-height:1.5;
+    }
+    .accuracy-card label, .qcard label {
+      display:flex;
+      gap:10px;
+      margin:10px 0;
+      align-items:flex-start;
+      cursor:pointer;
+      color:var(--muted);
+      line-height:1.55;
+    }
+    .meta-row {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+      align-items:center;
+    }
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 11px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1);
+      font-size:.82rem;
+      color:#e5efff;
+    }
+    .result {
+      font-weight:900;
+      letter-spacing:.01em;
+    }
+    .pass { color:var(--green); }
+    .fail { color:var(--red); }
+    .notice {
+      margin-top:12px;
+      padding:13px 14px;
+      border-radius:16px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.09);
+      color:var(--muted);
+      line-height:1.62;
+      font-size:.92rem;
+    }
+    .timeline {
+      display:grid;
+      gap:12px;
+    }
+    .timeline-step {
+      display:grid;
+      grid-template-columns:44px 1fr;
+      gap:12px;
+      align-items:flex-start;
+      padding:14px;
+      border-radius:18px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.1);
+    }
+    .step-num {
+      width:44px;
+      height:44px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      background:linear-gradient(135deg, rgba(34,211,238,.22), rgba(139,92,246,.22));
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .scenario {
+      margin-top:12px;
+      padding:16px;
+      border-radius:20px;
+      background:rgba(251,113,133,.08);
+      border:1px solid rgba(251,113,133,.18);
+      line-height:1.72;
+      color:#ffe6eb;
+    }
+    .toast-wrap {
+      position:fixed;
+      top:18px;
+      right:18px;
+      z-index:30;
+      display:grid;
+      gap:10px;
+    }
+    .toast {
+      min-width:260px;
+      max-width:360px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:rgba(9,15,29,.92);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      animation:toastIn .28s ease;
+      color:var(--text);
+    }
+    @keyframes toastIn {
+      from { opacity:0; transform:translateY(-8px) scale(.98); }
+      to { opacity:1; transform:translateY(0) scale(1); }
+    }
+    .modal-backdrop {
+      position:fixed;
+      inset:0;
+      background:rgba(3,7,17,.74);
+      backdrop-filter:blur(8px);
+      z-index:40;
+      display:grid;
+      place-items:center;
+      padding:20px;
+    }
+    .modal {
+      width:min(640px, 100%);
+      padding:24px;
+      border-radius:30px;
+      background:linear-gradient(180deg, rgba(13,21,42,.96), rgba(8,13,26,.96));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .modal::after {
+      content:"";
+      position:absolute;
+      inset:-40% -20% auto auto;
+      width:220px;
+      height:220px;
+      background:radial-gradient(circle, rgba(34,211,238,.2), transparent 72%);
+      border-radius:50%;
+    }
+    .modal h2 {
+      margin:0 0 12px;
+      font-size:2rem;
+      position:relative;
+      z-index:1;
+    }
+    .modal p {
+      margin:0 0 16px;
+      color:var(--muted);
+      line-height:1.7;
+      position:relative;
+      z-index:1;
+    }
+    .modal-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      position:relative;
+      z-index:1;
+    }
+    .hidden-form {
+      position:absolute;
+      left:-9999px;
+      opacity:0;
+      pointer-events:none;
+    }
+    .footer {
+      margin-top:18px;
+      padding:16px 4px 10px;
+      color:var(--muted);
+      line-height:1.68;
+      font-size:.92rem;
+    }
+    @media (max-width:1100px) {
+      .app { grid-template-columns:1fr; }
+      .sidebar { position:relative; height:auto; }
+      .hero-grid, .top-progress, .panel-grid { grid-template-columns:1fr; }
+      .stats-grid, .profile-grid, .ring-grid, .modal-grid { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:760px) {
+      .main, .sidebar { padding:14px; }
+      .hero h2 { font-size:1.75rem; }
+      .stats-grid, .profile-grid, .ring-grid, .modal-grid { grid-template-columns:1fr; }
+      .timeline-step { grid-template-columns:1fr; }
+      .step-num { width:40px; height:40px; }
     }
   </style>
 </head>
 <body>
-  <div class="orb"></div>
-  <div class="orb2"></div>
+  <div class="mesh">
+    <div class="blob one"></div>
+    <div class="blob two"></div>
+    <div class="blob three"></div>
+  </div>
 
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="badge">NP</div>
+  <form name="training-results" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="hidden-form">
+    <input type="hidden" name="form-name" value="training-results">
+    <input type="text" name="bot-field">
+    <input type="text" name="trainee_name">
+    <input type="email" name="email">
+    <input type="text" name="module">
+    <input type="text" name="quiz_score">
+    <input type="text" name="quiz_percent">
+    <input type="text" name="accuracy_score">
+    <input type="text" name="accuracy_percent">
+    <input type="text" name="status">
+    <input type="text" name="completed_modules">
+    <input type="text" name="timestamp">
+    <input type="text" name="site_name">
+  </form>
+
+  <div id="welcomeModal" class="modal-backdrop hidden">
+    <div class="modal">
+      <div class="eyebrow"><span class="dot"></span>Interactive training start</div>
+      <h2>Enter trainee details</h2>
+      <p>Learners must enter their name before taking quizzes and accuracy checks. When deployed on Netlify, passed module results can be submitted through the built-in results form.</p>
+      <div class="modal-grid">
         <div>
-          <h1>NPPW Services | VA Operations System</h1>
-          <p>CEO Demonstration • Work Order Verification • Scheduling Automation • Reporting</p>
+          <label for="modalName">Trainee full name</label>
+          <input id="modalName" type="text" placeholder="Enter full name">
+        </div>
+        <div>
+          <label for="modalEmail">Email address (optional)</label>
+          <input id="modalEmail" type="email" placeholder="Optional email for reply-to">
         </div>
       </div>
-      <div class="nav">
-        <a href="#workflow">System Workflow</a>
-        <a href="#verification">Verification Desk</a>
-        <a href="#simulation">Live Demo</a>
-        <a href="training.html">Training Program</a>
+      <div class="hero-actions" style="margin-top:18px; position:relative; z-index:1;">
+        <button class="btn" id="startTrainingBtn">Start training</button>
       </div>
     </div>
+  </div>
 
-    <section class="hero">
-      <div class="card hero-copy">
-        <span class="eyebrow">Visual System Architecture for NPPW</span>
-        <h2>How a VA + light automation can reduce admin overload for recurring field services.</h2>
-        <p>
-          This presentation visualizes the proposed operating system for NPPW’s current needs: handling <strong>high-volume ServiceChannel verification</strong>, supporting <strong>manual work order / admin tasks</strong>, and reducing re-entry work between <strong>Acuity, Jobber, and Google Sheets</strong>. The goal is to show the CEO a simple but scalable support model that improves accuracy, speed, and visibility.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#workflow">View Workflow</a>
-          <a class="btn" href="training.html">Open NPPW Training Page</a>
-        </div>
-      </div>
+  <div class="toast-wrap" id="toastWrap"></div>
 
-      <div class="card impact-grid">
-        <div class="impact">
-          <strong>4 hrs/day</strong>
-          <span>Focused verification time for one specialist's location group, creating a clear opportunity for VA support.</span>
-        </div>
-        <div class="impact">
-          <strong>36 locations</strong>
-          <span>One work order specialist may manage a large site set, especially for recurring parking lot sweeping tickets.</span>
-        </div>
-        <div class="impact">
-          <strong>2 specialists</strong>
-          <span>A trained VA can potentially support the verification work of two internal specialists full-time.</span>
-        </div>
-        <div class="impact">
-          <strong>3 priorities</strong>
-          <span>Verification, data transfer, and reporting are the immediate operational wins before future SEO / web support.</span>
-        </div>
-      </div>
-    </section>
+  <div class="app">
+    <aside class="sidebar">
+      <section class="glass brand">
+        <div class="eyebrow"><span class="dot"></span>LAVA-style premium training UI</div>
+        <h1>NPPW + MPP Interactive Training Academy</h1>
+        <p>For property services, ServiceChannel verification, dispatch support, and Acuity-to-Jobber workflow training. Each module now includes an accuracy lab and a quiz gate.</p>
+      </section>
 
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h3>Current business pain points translated into a support system</h3>
-          <p>The system below is based on NPPW's recurring service model for national retail locations.</p>
+      <section class="glass card">
+        <div style="display:flex; justify-content:space-between; gap:10px; align-items:center;">
+          <strong>Course completion</strong>
+          <span class="small-muted" id="progressText">0 / 10 modules</span>
         </div>
-      </div>
-      <div class="grid-3">
-        <div class="card mini">
-          <span class="pill">Pain Point 01</span>
-          <h4>ServiceChannel verification overload</h4>
-          <p>Team members spend large blocks of time checking subcontractor compliance: check-in/out, time on site, ticket notes, and photos.</p>
+        <div class="progress-line"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="ring-grid">
+          <div class="ring-card">
+            <div class="ring" id="quizRing"><span id="quizRingText">0%</span></div>
+            <div><strong>Quiz average</strong></div>
+            <div class="small-muted">Best quiz scores</div>
+          </div>
+          <div class="ring-card">
+            <div class="ring alt" id="accuracyRing"><span id="accuracyRingText">0%</span></div>
+            <div><strong>Accuracy average</strong></div>
+            <div class="small-muted">Attention-to-detail lab</div>
+          </div>
         </div>
-        <div class="card mini">
-          <span class="pill">Pain Point 02</span>
-          <h4>Acuity to Jobber re-entry</h4>
-          <p>Delivery requests enter through Acuity, but they must still be re-entered in Jobber for scheduling and invoicing preparation, increasing labor and overbooking risk.</p>
-        </div>
-        <div class="card mini">
-          <span class="pill">Pain Point 03</span>
-          <h4>Leadership visibility gap</h4>
-          <p>Operations leadership needs a clean daily and weekly summary of work order status, vendor compliance, and scheduling exceptions.</p>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section" id="workflow">
-      <div class="section-head">
-        <div>
-          <h3>Visual workflow of the proposed system</h3>
-          <p>This is the ideal day-to-day operating flow combining human review and automation.</p>
+      <section class="glass card">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+          <strong>Live module map</strong>
+          <span class="pill" id="lockedCount">9 locked</span>
         </div>
-      </div>
-      <div class="card flow-card">
-        <div class="lane-labels">
-          <span>Operations Intake</span>
-          <span>VA Review Layer</span>
-          <span>Automation Layer</span>
-          <span>Execution Layer</span>
-          <span>Reporting Layer</span>
-        </div>
-        <div class="flow-scroll">
-          <div class="flow">
-            <div class="step">
-              <div class="num">1</div>
-              <h4>Request / booking enters</h4>
-              <p>New work or delivery request is received by the business.</p>
-              <ul>
-                <li>Acuity booking for delivery services</li>
-                <li>Manual request or ticket data from operations</li>
-              </ul>
+        <div class="notice">A module completes only when the learner passes both the quiz and the accuracy lab.</div>
+        <div class="module-list" id="moduleList"></div>
+      </section>
+    </aside>
+
+    <main class="main">
+      <section class="glass hero">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow"><span class="dot"></span>Training website for learning, coaching, and Netlify deployment</div>
+            <h2 id="moduleTitle">Module 1</h2>
+            <p id="moduleSummary"></p>
+            <div class="chips" id="objectiveTags"></div>
+            <div class="hero-actions">
+              <button class="btn" id="jumpAccuracyBtn">Jump to accuracy lab</button>
+              <button class="btn alt" id="jumpQuizBtn">Jump to quiz gate</button>
+              <button class="btn ghost" id="resetProgressBtn">Reset progress</button>
             </div>
-            <div class="step">
-              <div class="num">2</div>
-              <h4>VA validates intake data</h4>
-              <p>The VA checks the intake before it moves downstream.</p>
-              <ul>
-                <li>Customer / store name</li>
-                <li>Address and contact details</li>
-                <li>Service type and date / time</li>
-              </ul>
+          </div>
+
+          <div class="hero-side">
+            <div class="stats-grid">
+              <div class="stat">
+                <div class="stat-value">10</div>
+                <div><strong>Expanded modules</strong></div>
+                <div class="small-muted">Business, operations, dispatch, verification, and support workflow.</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value">20</div>
+                <div><strong>Tests per module</strong></div>
+                <div class="small-muted">10 knowledge questions and 10 quiz questions, plus accuracy drills.</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value">70%</div>
+                <div><strong>Quiz passing mark</strong></div>
+                <div class="small-muted">Needed before the module can count toward completion.</div>
+              </div>
+              <div class="stat">
+                <div class="stat-value">80%</div>
+                <div><strong>Accuracy lab pass</strong></div>
+                <div class="small-muted">Tests detail-checking and decision accuracy.</div>
+              </div>
             </div>
-            <div class="step">
-              <div class="num">3</div>
-              <h4>Zapier automation triggers</h4>
-              <p>Standard booking data is pushed into the next system where possible.</p>
-              <ul>
-                <li>Acuity → Zapier</li>
-                <li>Mapping rules applied</li>
-                <li>Duplicate prevention checks</li>
-              </ul>
-            </div>
-            <div class="step">
-              <div class="num">4</div>
-              <h4>Jobber record created / updated</h4>
-              <p>Operations record is built in Jobber for scheduling visibility and invoice prep.</p>
-              <ul>
-                <li>Create request / job / client</li>
-                <li>Driver scheduling prep</li>
-                <li>Internal ops follow-up</li>
-              </ul>
-            </div>
-            <div class="step">
-              <div class="num">5</div>
-              <h4>Service work happens in field</h4>
-              <p>Subcontractors or crews execute recurring work like parking lot sweeping, power washing, or landscaping.</p>
-              <ul>
-                <li>Check-in / check-out expected</li>
-                <li>Photos and ticket notes required</li>
-              </ul>
-            </div>
-            <div class="step">
-              <div class="num">6</div>
-              <h4>VA verifies ServiceChannel completion</h4>
-              <p>The VA performs compliance review before confirming the ticket.</p>
-              <ul>
-                <li>Time on site threshold</li>
-                <li>Photo verification</li>
-                <li>Missing check-in exception handling</li>
-              </ul>
-            </div>
-            <div class="step">
-              <div class="num">7</div>
-              <h4>Zapier / manual log to reporting sheet</h4>
-              <p>Key result data is recorded for leadership visibility and issue tracking.</p>
-              <ul>
-                <li>Google Sheets daily log</li>
-                <li>Exception reason coding</li>
-                <li>Status for specialist review</li>
-              </ul>
-            </div>
-            <div class="step">
-              <div class="num">8</div>
-              <h4>Leadership dashboard and escalation</h4>
-              <p>Managers review completed work, issues, turnaround time, and training opportunities.</p>
-              <ul>
-                <li>Daily summary</li>
-                <li>Weekly performance trends</li>
-                <li>Escalation list</li>
-              </ul>
+
+            <div class="profile-card">
+              <div style="display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:12px;">
+                <strong>Trainee profile</strong>
+                <span class="pill" id="submissionStatus">Ready</span>
+              </div>
+              <div class="profile-grid">
+                <div>
+                  <label for="traineeName">Full name</label>
+                  <input id="traineeName" type="text" placeholder="Enter trainee full name">
+                </div>
+                <div>
+                  <label for="traineeEmail">Email (optional)</label>
+                  <input id="traineeEmail" type="email" placeholder="Optional email">
+                </div>
+              </div>
+              <div class="hero-actions" style="margin-top:14px;">
+                <button class="btn" id="saveLearnerBtn">Save learner</button>
+              </div>
+              <div class="banner">When deployed on Netlify, each completed module can submit the trainee name, module, quiz score, and accuracy score through the built-in results form.</div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section class="section" id="verification">
-      <div class="section-head">
-        <div>
-          <h3>ServiceChannel verification desk model</h3>
-          <p>The VA becomes a structured verification desk, not just a data entry assistant.</p>
-        </div>
-      </div>
-      <div class="swim-grid">
-        <div class="card list-card">
-          <h4 style="margin-top:0">Verification checklist flow</h4>
-          <div class="checklist">
-            <div class="check">
-              <div class="dot"></div>
-              <div><b>1. Open ticket and confirm site identity</b><span>Verify store number, location, service date, and work order type.</span></div>
+        <div class="top-progress">
+          <div class="glass progress-card">
+            <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
+              <div>
+                <strong>Module status</strong>
+                <div class="small-muted" id="moduleStatusText">Quiz pending • Accuracy pending</div>
+              </div>
+              <span class="pill" id="moduleCompletionPill">In progress</span>
             </div>
-            <div class="check">
-              <div class="dot"></div>
-              <div><b>2. Review check-in and check-out</b><span>Confirm the subcontractor recorded presence in the system correctly.</span></div>
-            </div>
-            <div class="check">
-              <div class="dot warn"></div>
-              <div><b>3. Compare time on site to service standard</b><span>Example: flag a 30-minute visit if the work usually requires 1–1.5 hours.</span></div>
-            </div>
-            <div class="check">
-              <div class="dot"></div>
-              <div><b>4. Validate photo compliance</b><span>Check for before/after images, quality, relevance, and upload completeness.</span></div>
-            </div>
-            <div class="check">
-              <div class="dot warn"></div>
-              <div><b>5. Review notes and exceptions</b><span>Confirm any issue notes, weather notes, or service completion updates are documented.</span></div>
-            </div>
-            <div class="check">
-              <div class="dot red"></div>
-              <div><b>6. Escalate if non-compliant</b><span>If check-in, timing, or proof is missing, the VA logs the exception and escalates using the standard protocol.</span></div>
-            </div>
-            <div class="check">
-              <div class="dot"></div>
-              <div><b>7. Record final status</b><span>Completed, pending clarification, rejected proof, or needs call-back to ServiceChannel.</span></div>
+            <div class="notice" id="bestScoreNotice">Best quiz: 0% • Best accuracy: 0%</div>
+          </div>
+          <div class="glass progress-card">
+            <strong>Training rhythm</strong>
+            <div class="small-muted" style="margin-top:8px;">
+              Read the business context first, review the process flow, then complete the accuracy lab before submitting the quiz. This helps trainees slow down and practice attention to detail.
             </div>
           </div>
         </div>
-        <div class="card list-card">
-          <h4 style="margin-top:0">What the CEO gets from this model</h4>
-          <div class="checklist">
-            <div class="check"><div class="dot"></div><div><b>Higher capacity</b><span>Internal specialists spend less time on repetitive proof checking.</span></div></div>
-            <div class="check"><div class="dot"></div><div><b>Better compliance</b><span>One trained process owner follows the same rules on every ticket.</span></div></div>
-            <div class="check"><div class="dot"></div><div><b>Clear exception queue</b><span>Leadership can see exactly what needs attention and why.</span></div></div>
-            <div class="check"><div class="dot"></div><div><b>Stronger reporting</b><span>Google Sheet logs can be summarized into daily and weekly operations views.</span></div></div>
-            <div class="check"><div class="dot"></div><div><b>Scalable foundation</b><span>After proving success in operations support, the same VA team can expand into web updates, marketing admin, and SEO support.</span></div></div>
+      </section>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="process">Process</button>
+        <button class="tab-btn" data-tab="qa">Q&A</button>
+        <button class="tab-btn" data-tab="accuracy">Accuracy Lab</button>
+        <button class="tab-btn" data-tab="quiz">Quiz Gate</button>
+        <button class="tab-btn" data-tab="apply">Assignments</button>
+      </div>
+
+      <section id="tab-overview">
+        <div class="panel-grid">
+          <div class="glass panel">
+            <h3>Expanded training discussion</h3>
+            <div id="lessonBlock"></div>
+          </div>
+          <div class="glass panel">
+            <h3>Interactive discussion prompts</h3>
+            <div class="stack" id="discussionBlock"></div>
+            <div class="notice">Use these prompts for coaching, self-reflection, or live discussion. The goal is to think in business outcomes and operational impact.</div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h3>Role ownership inside the operating system</h3>
-          <p>Each tool has a specific purpose to prevent overlap and confusion.</p>
-        </div>
-      </div>
-      <div class="roles">
-        <div class="card role">
-          <h4>Acuity</h4>
-          <p>Booking intake for delivery-related scheduling. It is the front-door trigger, not the final operating source of truth.</p>
-        </div>
-        <div class="card role">
-          <h4>Zapier</h4>
-          <p>Automation bridge used to move standardized data from one platform to another and reduce repetitive re-entry.</p>
-        </div>
-        <div class="card role">
-          <h4>Jobber</h4>
-          <p>Operational job / scheduling and invoicing-prep environment for downstream work coordination.</p>
-        </div>
-        <div class="card role">
-          <h4>Google Sheets</h4>
-          <p>Leadership-facing reporting log for exceptions, completion status, trends, and operational transparency.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="simulation">
-      <div class="section-head">
-        <div>
-          <h3>Interactive light-automation demo</h3>
-          <p>Use this during the CEO presentation to show how the process behaves in real situations.</p>
-        </div>
-      </div>
-      <div class="sim-wrap">
-        <div class="card sim-panel">
-          <span class="pill">Demonstration Console</span>
-          <h4 style="margin:0 0 10px">Scenario runner</h4>
-          <p style="margin:0;color:var(--muted);line-height:1.6">Choose a scenario to simulate the system behavior. This is ideal for explaining why the VA still matters even with automation in place.</p>
-          <div class="controls">
-            <button class="tagbtn active" data-scenario="success">Success path</button>
-            <button class="tagbtn" data-scenario="phone">Missing phone number</button>
-            <button class="tagbtn" data-scenario="sheet">Google Sheet logging error</button>
-            <button class="tagbtn" id="runBtn">Run scenario</button>
+      <section id="tab-process" class="hidden">
+        <div class="panel-grid">
+          <div class="glass panel">
+            <h3>Step-by-step process map</h3>
+            <div class="timeline" id="stepsBlock"></div>
           </div>
-          <div id="console" class="console"></div>
-        </div>
-        <div class="card sim-panel">
-          <span class="pill">Leadership Takeaway</span>
-          <div id="scenarioSummary" class="summary-box"></div>
-          <div class="summary-box">
-            <h4>Why this demo matters</h4>
-            <p>
-              Automation helps move clean data faster, but it does not replace operational judgment. The VA handles validation, exception review, ServiceChannel proof checking, and communication follow-up. That is the real value proposition for NPPW.
-            </p>
-          </div>
-          <div class="summary-box">
-            <h4>Recommended starting scope</h4>
-            <p>
-              Start with <strong>work order verification</strong>, <strong>ticket updates</strong>, and <strong>Acuity → Jobber support</strong>. Once stable, expand into reporting assistance, web updates, and marketing / SEO admin support.
-            </p>
+          <div class="glass panel">
+            <h3>Module objectives</h3>
+            <div class="stack" id="objectivesBlock"></div>
+            <div class="notice">A strong trainee should be able to explain these objectives clearly enough that another support assistant could follow the workflow without guessing.</div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h3>Recommended rollout phases</h3>
-          <p>A practical 5-phase implementation path for the CEO to review.</p>
+      <section id="tab-qa" class="hidden">
+        <div class="glass panel">
+          <h3>10 knowledge questions and answers</h3>
+          <div id="faqBlock"></div>
         </div>
-      </div>
-      <div class="timeline">
-        <div class="card phase"><strong>Phase 1</strong><h4>Process capture</h4><p>Document exact verification rules, escalation paths, and the Acuity-to-Jobber fields required by operations.</p></div>
-        <div class="card phase"><strong>Phase 2</strong><h4>VA training</h4><p>Train one dedicated VA on ServiceChannel review, call handling, ticket management, and multi-system data flow.</p></div>
-        <div class="card phase"><strong>Phase 3</strong><h4>Pilot support</h4><p>Assign a defined location group or specialist pair and track turnaround time, issue rate, and compliance accuracy.</p></div>
-        <div class="card phase"><strong>Phase 4</strong><h4>Automation hardening</h4><p>Refine Zapier mapping rules, standardize error handling, and tighten reporting in Google Sheets.</p></div>
-        <div class="card phase"><strong>Phase 5</strong><h4>Scale support</h4><p>Expand into broader admin support, reporting, web updates, and basic SEO / marketing support.</p></div>
-      </div>
-    </section>
+      </section>
 
-    <footer>
-      <strong>Next step:</strong> Open the <a href="training.html" style="color:#dff7ff">separate NPPW training program page</a> for the detailed curriculum, module breakdown, and 15-day training roadmap.
-    </footer>
+      <section id="tab-accuracy" class="hidden">
+        <div class="glass panel">
+          <h3 id="accuracyTitle">Accuracy Lab</h3>
+          <p id="accuracyIntro" class="small-muted"></p>
+          <div class="interactive-grid" id="accuracyBlock"></div>
+          <div class="meta-row">
+            <button class="btn" id="submitAccuracyBtn">Submit accuracy lab</button>
+            <button class="btn alt" id="resetAccuracyBtn">Reset lab</button>
+            <span class="result" id="accuracyResult"></span>
+          </div>
+          <div class="notice">Accuracy labs are designed to test careful reading, validation, and attention to operational details. Learners must score at least 80% to pass.</div>
+        </div>
+      </section>
+
+      <section id="tab-quiz" class="hidden">
+        <div class="glass panel">
+          <h3>Quiz gate</h3>
+          <p class="small-muted">Pass the quiz with at least 70% to qualify for module completion.</p>
+          <div class="interactive-grid" id="quizBlock"></div>
+          <div class="meta-row">
+            <button class="btn" id="submitQuizBtn">Submit quiz</button>
+            <button class="btn alt" id="resetQuizBtn">Reset quiz</button>
+            <span class="result" id="quizResult"></span>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-apply" class="hidden">
+        <div class="panel-grid">
+          <div class="glass panel">
+            <h3>Practice assignment</h3>
+            <div class="stack" id="assignmentBlock"></div>
+          </div>
+          <div class="glass panel">
+            <h3>Scenario challenge</h3>
+            <div class="scenario" id="scenarioBlock"></div>
+            <div class="notice">Ask the trainee to answer the scenario in writing. Compare their answer against the process map, module objectives, and the accuracy lab logic.</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer">
+        This website is for training and learning purposes. It combines the official business context you provided for NPPW and MPP-style operations with module-based learning, attention-to-detail drills, and Netlify-ready score submission.
+      </div>
+    </main>
   </div>
 
   <script>
-    const scenarios = {
-      success: {
-        logs: [
-          '[Acuity] New delivery booking received for Store #4521',
-          '[VA Review] Customer name, address, date, and service type validated',
-          '[Zapier] Trigger fired successfully',
-          '[Jobber] Client / request created for delivery scheduling',
-          '[Ops] Team can assign schedule without manual re-entry delay',
-          '[Service Execution] Work completed and proof submitted',
-          '[VA Verification] Check-in / check-out, photos, and notes confirmed',
-          '[Google Sheets] Daily log updated: status = Completed / Verified',
-          '[Leadership] Daily dashboard now reflects clean completion data'
-        ],
-        summaryTitle: 'Success path outcome',
-        summaryText: 'This scenario shows the ideal flow: clean intake, successful automation, proper operational visibility, and a final verified status for leadership.'
-      },
-      phone: {
-        logs: [
-          '[Acuity] New delivery booking received for Store #8107',
-          '[VA Review] Validation failed: phone number missing',
-          '[Rule] Required contact field prevents clean handoff into Jobber',
-          '[Zapier] Automation paused to avoid incomplete job creation',
-          '[VA Action] Contact source / internal rep for missing phone number',
-          '[VA Action] Add note: Pending required customer contact data',
-          '[Jobber] Record not created until data is corrected',
-          '[Google Sheets] Exception logged: Missing intake field',
-          '[Leadership] Case visible in issue tracker for follow-up'
-        ],
-        summaryTitle: 'Exception path: missing intake data',
-        summaryText: 'This demonstrates why the VA is essential. Automation should not push bad data into Jobber. The VA catches the issue early and protects scheduling quality.'
-      },
-      sheet: {
-        logs: [
-          '[Acuity] New booking validated and pushed through Zapier',
-          '[Jobber] Request created successfully',
-          '[ServiceChannel] Ticket proof later verified by VA',
-          '[Zapier] Reporting step attempted',
-          '[Google Sheets] Write failure detected: API or permission error',
-          '[VA Action] Save result in temporary exception queue',
-          '[VA Action] Notify lead / ops that reporting log needs correction',
-          '[VA Action] Manually update tracker if needed for same-day visibility',
-          '[Leadership] Operational work is safe, but reporting issue is escalated'
-        ],
-        summaryTitle: 'Reporting path: sheet logging failure',
-        summaryText: 'This scenario shows system resilience. Even when the reporting layer fails, the VA preserves visibility and keeps leadership informed.'
-      }
+    const modules = [{"title": "Module 1: Business Overview", "summary": "Understand what the account is, why clients hire a property-services partner, and how NPPW/MPP fits into facilities support and commercial operations.", "objectives": ["Explain what kind of business this account supports.", "Describe why property services matter to commercial clients and national retailers.", "Understand how recurring maintenance and dependable service create business value.", "Recognize the difference between doing a task and supporting an operation."], "lesson": ["This account is built around property services that help commercial locations stay clean, safe, organized, and presentable. On the official NPPW website, the company describes itself as a growing family-owned provider of pressure washing, street sweeping, landscaping, janitorial work, irrigation, and related exterior-support services. That means the business does not sell products on a shelf. It sells service results that support how a location looks, feels, and functions for customers, tenants, employees, and visitors.", "The MPP operations notes add a deeper view of how this kind of company works in the real world. The business may act as the primary vendor on many ServiceChannel locations for national retailers, while also handling recurring site work such as parking lot sweeping, general maintenance, portering, and landscaping. In this environment, good service is not only about finishing work. It is also about proving that the work happened, meeting client standards, documenting compliance, and keeping multiple systems updated.", "A trainee should understand that clients hire a company like this because their physical locations affect their reputation and daily operations. A dirty storefront, debris-filled lot, missed sweep, unverified work order, or delayed delivery can affect customer experience, safety, tenant satisfaction, and operational readiness. That is why property-service businesses become operational partners rather than simple vendors.", "This business also depends heavily on backend coordination. Manual data transfer between tools, ServiceChannel verification, schedule management, route planning, and quality checks all affect how well field service performs. The account therefore combines field execution with administrative discipline, technology, and communication.", "By the end of this module, the learner should be able to explain the account in business terms: a commercial property-services operation that supports locations through recurring maintenance, verified service delivery, clear coordination, and organized client support."], "discussion": ["Why is a property-services company considered an operations partner instead of just a cleaning vendor?", "What can happen to a client's business image if exterior and site conditions are ignored?", "How does backend support affect what happens in the field?"], "steps": ["Step 1: Identify the type of business being served, such as retail, multi-site commercial, or delivery operations.", "Step 2: Connect the service request to a business outcome like safety, appearance, compliance, or readiness.", "Step 3: Understand that recurring service creates trust because clients depend on consistency.", "Step 4: Treat documentation, verification, and communication as part of the service, not extra work.", "Step 5: Explain the account as one connected operation from request to proof to payment."], "qa": [["What kind of business is this account?", "It is a commercial property-services and facilities-support operation that helps locations stay clean, safe, presentable, and ready for daily activity."], ["Is this business only about pressure washing?", "No. The business may include pressure washing, sweeping, maintenance, portering, landscaping, janitorial support, irrigation, deliveries, and verification-driven workflow support."], ["Why do commercial clients outsource this work?", "They outsource it because they need reliable service without building an internal team for every maintenance and verification task."], ["Why are national retailers important in this account?", "Large retailers often operate many locations and need a dependable vendor to manage recurring work and compliance across sites."], ["What does it mean to be a primary vendor?", "It means the company is the first assigned or preferred service provider for certain client locations and must meet expectations consistently."], ["Why is business image connected to this account?", "Because site cleanliness, parking lot condition, and documented service affect how customers and tenants view the business."], ["What makes this more than a simple task-based job?", "The account involves schedules, service quality, system updates, proof-of-work checks, and customer communication, all of which support operations."], ["Why does a VA need to understand the business model?", "A VA can only support the workflow well if they understand what the client expects and why each step matters."], ["What is the relationship between field teams and admin support?", "Field teams perform physical work, while admin support keeps jobs accurate, verified, communicated, and ready for billing or follow-up."], ["What is the main takeaway of this module?", "This account supports business operations through recurring property services, documented performance, and strong backend coordination."]], "quiz": [{"q": "What is the best description of this account?", "options": ["A property-services operation supporting commercial clients", "A retail store selling maintenance products", "A software-only business", "A manufacturing warehouse"], "answer": 0}, {"q": "Why do clients hire a company like NPPW/MPP?", "options": ["To avoid maintaining sites internally and gain reliable service", "To buy office furniture", "To replace their accounting team", "To create payroll reports"], "answer": 0}, {"q": "What does being a primary vendor usually mean?", "options": ["The company is a preferred or first-assigned service provider", "The company owns the client", "The company only answers phone calls", "The company avoids recurring work"], "answer": 0}, {"q": "Why is site appearance important?", "options": ["It affects customer impression, safety, and readiness", "It only matters to drivers", "It never affects business", "It is unrelated to service value"], "answer": 0}, {"q": "Which statement is true about this business?", "options": ["Documentation and verification are part of the service experience", "Only physical work matters", "Backend work has no value", "Scheduling is optional"], "answer": 0}, {"q": "Why should trainees think in business outcomes?", "options": ["Because clients buy results, not just labor", "Because scope never matters", "Because systems are decorative", "Because only management needs context"], "answer": 0}, {"q": "What does recurring maintenance create?", "options": ["Consistency and long-term client trust", "Random service timing", "Less need for records", "No need for communication"], "answer": 0}, {"q": "How does admin support affect field operations?", "options": ["It helps keep jobs accurate, verified, and coordinated", "It only changes email signatures", "It replaces all crews", "It removes the need for clients"], "answer": 0}, {"q": "What is one key business need solved by this account?", "options": ["Keeping locations presentable and operationally ready", "Building houses from scratch", "Writing insurance policies", "Selling software licenses"], "answer": 0}, {"q": "What is the core lesson of Module 1?", "options": ["This is a connected service operation, not a simple cleaning task", "This is only about supplies", "This is only about marketing", "This is only about driving"], "answer": 0}], "assignment": ["Write a 5-sentence summary explaining the business in your own words.", "List 3 reasons a national retailer would want a dependable primary vendor.", "Describe how backend verification can protect client trust."], "scenario": "A retail client has recurring parking lot sweeping at multiple locations. Explain why the account needs both physical service and admin verification support."}, {"title": "Module 2: Core Services", "summary": "Learn the main services in the account and connect each one to the client problem it solves.", "objectives": ["Identify the account’s main service categories.", "Explain what business problem each service solves.", "Differentiate recurring services from one-time or special projects.", "Understand why bundled services create more client value."], "lesson": ["The official NPPW website highlights pressure washing, commercial landscaping, parking lot sweeping, construction cleanup, soft washing, irrigation, janitorial services, and disinfecting. The MPP notes expand the service picture further by adding maintenance and portering. Together, these services show a business model built around keeping commercial locations clean, functioning, and client-ready.", "Pressure washing removes grime, dirt, stains, grease, and buildup from hard exterior surfaces. Parking lot sweeping keeps shopping centers and lots free from debris and trash. Landscaping and irrigation protect curb appeal and outdoor maintenance. Janitorial and portering support daily cleanliness and property presentation. Construction cleanup prepares a site for turnover or reopening.", "Recurring services are especially important in this business. Sweeping, landscaping, maintenance checks, and portering often repeat on a weekly, monthly, or route-based basis. These services create predictable client value and require strong scheduling discipline. Project-based work, such as deep power washing or construction cleanup, may happen less often but can require more detailed scope review.", "Each service should be translated into a client outcome. Sweeping protects image and safety. Landscaping protects appearance and property value. Verification of work protects billing and compliance. Delivery scheduling protects route efficiency and customer experience. Good trainees do not memorize service names only. They understand what each service is supposed to achieve.", "By the end of this module, learners should be able to connect service categories to business results and explain why clients often need a single provider that can support multiple property needs."], "discussion": ["Which services in this account are most likely recurring, and why?", "How does bundling services make life easier for a client with many locations?", "What can happen if a service is recorded without understanding the business need behind it?"], "steps": ["Step 1: Identify the exact service requested.", "Step 2: Confirm whether the request is recurring, route-based, or one-time.", "Step 3: Match the service to the property condition or client problem.", "Step 4: Record scope clearly so the right crew or process can be assigned.", "Step 5: Note any proof or verification requirements tied to the service."], "qa": [["What is the purpose of pressure washing?", "It removes visible buildup from surfaces to improve cleanliness, appearance, and site presentation."], ["Why is parking lot sweeping important?", "It removes loose trash and debris that can damage a property's image and create safety concerns."], ["What does landscaping support?", "Landscaping supports curb appeal, grounds upkeep, and the overall look of the site."], ["Why is irrigation included in the service lineup?", "Because healthy landscapes depend on working drip systems, sprinkler lines, and repair support."], ["What is portering in this context?", "Portering usually refers to ongoing site support tasks that help keep locations presentable between larger service visits."], ["Why might a client need janitorial support?", "To maintain cleaner business environments and improve the overall customer or tenant experience."], ["What is construction cleanup used for?", "It prepares a site for turnover, occupancy, or final handoff after work has been completed."], ["What makes recurring services operationally demanding?", "They require dependable schedules, accurate route planning, and consistent verification across many sites."], ["Why are bundled services valuable?", "They allow clients to rely on one provider for multiple property needs instead of coordinating several vendors."], ["What is the biggest lesson in this module?", "Every service should be understood in terms of the client problem it solves and the result it must deliver."]], "quiz": [{"q": "Which service is most directly tied to removing grime from hard exterior surfaces?", "options": ["Pressure washing", "Payroll coding", "Phone screening", "SEO writing"], "answer": 0}, {"q": "Which service helps keep shopping centers free from debris?", "options": ["Parking lot sweeping", "Invoicing", "Recruiting", "Claims filing"], "answer": 0}, {"q": "What does landscaping mainly support?", "options": ["Grounds appearance and upkeep", "Software setup", "Warehouse packing", "Legal review"], "answer": 0}, {"q": "Why is irrigation important?", "options": ["It helps maintain healthy landscaped areas", "It creates marketing campaigns", "It processes payroll", "It replaces route planning"], "answer": 0}, {"q": "Which is an example of a recurring service?", "options": ["Weekly sweeping", "One-time website redesign", "Annual tax filing", "New furniture delivery only"], "answer": 0}, {"q": "What is portering most closely related to?", "options": ["Ongoing property presentation support", "Product manufacturing", "Insurance underwriting", "Software coding"], "answer": 0}, {"q": "What should a trainee do after identifying a service?", "options": ["Connect it to the client problem and expected result", "Ignore the property condition", "Assume all services are the same", "Skip documentation"], "answer": 0}, {"q": "Why are bundled services useful?", "options": ["They reduce vendor coordination for the client", "They make records unnecessary", "They remove billing", "They replace communication"], "answer": 0}, {"q": "Which statement is true about recurring work?", "options": ["It depends on strong scheduling and consistency", "It never needs verification", "It only happens once", "It has no impact on client retention"], "answer": 0}, {"q": "What is the core takeaway of Module 2?", "options": ["Understand both the service and the business outcome", "Memorize names only", "Focus only on pricing", "Treat all jobs as identical"], "answer": 0}], "assignment": ["Create a simple table with 7 services and the business problem each one solves.", "Separate the services into recurring, project-based, or both.", "Write 3 sentences explaining why bundled services are valuable for multi-site clients."], "scenario": "A client asks for sweeping, landscaping touch-up, and pressure washing at several locations. Explain why that request should be handled as a coordinated service solution rather than three unrelated tasks."}, {"title": "Module 3: Clients, Decision Makers, and Business Owners Served", "summary": "Identify who the clients are, who approves work, and what business priorities shape their decisions.", "objectives": ["Recognize the main client types supported in the account.", "Identify common decision makers and approvers.", "Understand what these clients care about most.", "Learn how to communicate with a solutions-focused mindset."], "lesson": ["The official NPPW site points strongly toward commercial clients such as shopping centers, offices, property management companies, restaurants, gyms, salons, and other high-traffic spaces. The MPP notes add national retailers and recurring ServiceChannel locations to the picture. This means the account often supports businesses with many locations, strict expectations, and limited tolerance for missed documentation.", "Decision makers are not always the same person. In one account, the property owner may approve service. In another, the property manager, facilities manager, operations manager, store contact, or regional team may be the one who cares most about timing and completion. For delivery-related work, store teams may submit requests while dispatch or admin teams handle scheduling and invoicing support.", "These clients often care about the same core things: site condition, reliability, compliance, speed, low disruption, cost awareness, and proof that the job was done correctly. They want a partner that can solve problems without creating extra administrative burden for them.", "A VA must therefore understand the client point of view. A property manager wants fewer issues. A retailer wants consistent site readiness across locations. A store may want a fast, clear delivery process. A facilities contact wants documentation that holds up in a system like ServiceChannel.", "By the end of this module, trainees should be able to identify who the client is, who the real decision maker may be, and how to support communication in a way that matches business priorities."], "discussion": ["Why is it important to know whether you are dealing with a property manager, a store contact, or a business owner?", "How might a national retailer's expectations differ from a small single-location business?", "What do clients really mean when they ask for reliable service?"], "steps": ["Step 1: Identify the client type and whether the account is single-site or multi-site.", "Step 2: Determine who submits requests versus who approves or reviews service.", "Step 3: Note the client’s main priorities such as speed, compliance, quality, or low disruption.", "Step 4: Adjust communication style to be clear, professional, and outcome-focused.", "Step 5: Document the right contact details and escalation points."], "qa": [["Who are the main clients in this account?", "They are usually commercial clients such as property managers, retailers, shopping centers, offices, and other high-traffic business locations."], ["Can the person requesting service be different from the approver?", "Yes. A store or site contact may request help while a manager or operations team reviews performance or approvals."], ["Why do national retailers need structured support?", "Because they often manage many locations and need consistent service and documentation across all of them."], ["What does a property manager usually care about?", "A property manager usually cares about cleanliness, safety, vendor reliability, and reducing complaints or disruptions."], ["What does a business owner usually want from a service partner?", "They want dependable results, clear communication, and less time spent managing problems."], ["Why is it risky to communicate without understanding the decision maker?", "You may provide the wrong level of detail, miss a needed approval, or fail to address the real concern."], ["What does compliance mean in this account?", "It means meeting the client’s process expectations, documentation rules, and service standards."], ["Why does multi-site work require more structure?", "Because service issues, proof gaps, and communication mistakes multiply when many locations are involved."], ["How should a VA communicate with decision makers?", "With clear facts, strong follow-up, and a focus on the client’s operational priorities."], ["What is the biggest lesson in this module?", "Know who the client is, who matters in the approval chain, and what outcomes they care about most."]], "quiz": [{"q": "Which is a likely client type in this account?", "options": ["Property manager", "Movie actor", "Food distributor only", "Software investor"], "answer": 0}, {"q": "Why do national retailers often need structured vendor support?", "options": ["Because they manage multiple locations and expect consistency", "Because they dislike all vendors", "Because they never need documentation", "Because they avoid recurring service"], "answer": 0}, {"q": "Who might request service while someone else reviews performance?", "options": ["A store contact", "A field mower only", "A random customer", "A bank teller"], "answer": 0}, {"q": "What do many decision makers care about?", "options": ["Reliability, compliance, and site condition", "Decorative reports only", "Personal opinions", "Unstructured updates"], "answer": 0}, {"q": "Why should communication be solutions-focused?", "options": ["Because clients want problems resolved with clarity", "Because details never matter", "Because records are optional", "Because all requests are the same"], "answer": 0}, {"q": "Which statement is true?", "options": ["The requester and approver may be different people", "Every site has the same contact role", "Clients never review proof", "Store teams always handle invoicing"], "answer": 0}, {"q": "What is one risk of not understanding the decision maker?", "options": ["Sending the wrong message to the wrong person", "Improved speed automatically", "Better compliance without effort", "Less need for records"], "answer": 0}, {"q": "Why is multi-site work more demanding?", "options": ["Because small mistakes can repeat across many locations", "Because there are fewer moving parts", "Because documentation is never needed", "Because routing becomes irrelevant"], "answer": 0}, {"q": "What should a VA document carefully?", "options": ["Contact roles and escalation points", "Only the color of the site", "Only personal preferences", "Nothing after the call"], "answer": 0}, {"q": "What is the core takeaway of Module 3?", "options": ["Understand who the client is and what they care about", "Treat all contacts the same", "Focus only on prices", "Ignore chain of approval"], "answer": 0}], "assignment": ["List 5 possible decision makers or stakeholders in this account and describe what each one cares about.", "Write a short email update to a property manager after a recurring service issue is found.", "Explain why multi-site clients need stronger documentation than one-time clients."], "scenario": "A store contact requests sweeping at one location, but the regional operations manager later asks why proof is missing. Explain what this tells you about requester-versus-reviewer roles."}, {"title": "Module 4: Lead to Payment Operations", "summary": "Follow the workflow from intake to completion, proof, invoicing, and payment so you understand how the whole account moves.", "objectives": ["Map the full workflow from request to payment.", "Understand where errors usually create downstream problems.", "Recognize why manual transfer work slows operations.", "Learn the operational meaning of intake, verification, and billing prep."], "lesson": ["A service business only feels smooth when each stage connects properly to the next. The process often begins with lead intake or a work order, followed by information review, quote or scope preparation, approval, scheduling, dispatch, service completion, proof collection, invoicing support, and payment follow-up. When any stage is incomplete, the next stage becomes harder.", "The MPP notes describe one major challenge clearly: manual data transfer. Deliveries come into Acuity and then must be re-entered into Jobber for driver scheduling and invoicing preparation. This extra step consumes time and creates risk for overbooking or inconsistency when volumes rise. Manual transfer work may seem simple, but repeated across many jobs it can slow the entire operation.", "The ServiceChannel side of the workflow also adds operational load. Work orders are not just created and completed. They often need check-ins, time-on-site verification, photo confirmation, and ticket updates before the record is considered compliant. This means the back office is not simply typing. It is protecting accuracy, billing readiness, and client satisfaction.", "A strong trainee should see the workflow as a chain. Intake quality affects quoting. Quoting affects scheduling. Scheduling affects dispatch. Completion proof affects invoicing. Invoicing affects payment. If one link breaks, the client or the business pays for it in delays, confusion, or lost trust.", "By the end of this module, the learner should be able to explain the operational journey of a job and identify where support work has the greatest impact."], "discussion": ["Why is manual Acuity-to-Jobber transfer such a meaningful operational issue?", "Which stages in the workflow are most likely to create rework if details are missing?", "Why should proof and billing be considered part of service delivery?"], "steps": ["Step 1: Capture or receive the request with complete details.", "Step 2: Review scope, location, timing, and whether approval or quoting is needed.", "Step 3: Enter or transfer the job into the operational system accurately.", "Step 4: Schedule and dispatch the service with the correct details.", "Step 5: Confirm completion through proof, status updates, or verification.", "Step 6: Prepare records for invoicing and payment follow-up."], "qa": [["What is lead intake?", "It is the first stage where service details are received, reviewed, and prepared for action."], ["Why is complete intake information important?", "Because missing details cause delays in quoting, scheduling, and dispatch."], ["What is one current challenge described in the account notes?", "Manual re-entry of delivery requests from Acuity into Jobber."], ["Why does manual transfer create risk?", "Because it takes time and can cause duplicate work, inconsistency, or overbooking."], ["Why is ServiceChannel verification part of operations?", "Because completion must often be proven through check-ins, time review, and photos before the job is fully acceptable."], ["What happens if proof is weak after a job is done?", "Billing, compliance, and client confidence may all be affected."], ["Why should invoicing prep start with accurate records?", "Because payment depends on work details that can be defended and traced."], ["What does a workflow chain mean?", "It means each step affects the success of the next step."], ["Why is follow-up still part of operations after service is done?", "Because records may still need updates, proof, approval, or payment handling."], ["What is the key lesson in this module?", "A job is not really complete until the workflow is complete, including proof and billing readiness."]], "quiz": [{"q": "What is the first major stage of a job workflow?", "options": ["Lead intake or work order receipt", "Annual review only", "Tax filing", "Vehicle sale"], "answer": 0}, {"q": "Why is missing intake information dangerous?", "options": ["It can delay downstream steps", "It makes jobs faster", "It removes the need for quotes", "It reduces client expectations"], "answer": 0}, {"q": "Which manual process is specifically described in the notes?", "options": ["Acuity requests re-entered into Jobber", "Payroll moved into a CRM", "Emails copied into Excel only", "Maps copied into accounting"], "answer": 0}, {"q": "Why is ServiceChannel verification operationally important?", "options": ["Because proof is needed for compliance and readiness for billing", "Because it replaces all field work", "Because it only changes layouts", "Because clients never review it"], "answer": 0}, {"q": "Which step comes after scheduling and dispatch?", "options": ["Service completion and proof", "Website redesign", "Employee onboarding only", "Random data deletion"], "answer": 0}, {"q": "What can weak proof cause?", "options": ["Billing issues and client doubt", "Automatic approvals", "Faster automation", "Cleaner surfaces"], "answer": 0}, {"q": "Why is workflow thinking important?", "options": ["Each stage affects the next", "Only the first step matters", "Payment is unrelated to service", "Communication can be skipped"], "answer": 0}, {"q": "What is one benefit of accurate system entry?", "options": ["Better scheduling and invoicing readiness", "Less need for details", "More overbooking", "Less accountability"], "answer": 0}, {"q": "Why is payment follow-up tied to operations?", "options": ["Because business value is only captured when completed work becomes collected revenue", "Because finance is unrelated to service", "Because clients pay before work exists", "Because proof is never needed"], "answer": 0}, {"q": "What is the main lesson of Module 4?", "options": ["The workflow must stay connected from intake to payment", "Only dispatch matters", "Only sales matters", "Only field crews matter"], "answer": 0}], "assignment": ["Draw or list the full workflow from intake to payment in 8 steps.", "Explain where Acuity, Jobber, and proof review fit into the workflow.", "Write a short note about what can go wrong if one stage is skipped or rushed."], "scenario": "A delivery request was booked in Acuity but not re-entered in Jobber right away. Later, another job is scheduled for the same driver and time window. Explain which workflow control failed."}, {"title": "Module 5: Systems and Digital Tools", "summary": "Understand the role of ServiceChannel, Acuity, Jobber, Google Sheets, Google Maps, email, and phone in daily operations.", "objectives": ["Identify what each core tool is used for.", "Understand how system accuracy supports real work.", "See the difference between entering data and managing operations.", "Recognize where tool-to-tool handoffs create workload."], "lesson": ["This account uses systems because service operations involve many moving parts. The official NPPW site links to a client hub and two schedule delivery links, showing that customer booking and service access are part of the operational flow. The dispatch support notes add Acuity Scheduling, Jobber, Google Maps, Google Sheets, email, and phone as core tools for the delivery arm.", "ServiceChannel is especially important on the work-order side. It is used to manage tickets, review subcontractor activity, and maintain client-facing service records. Acuity is used to receive or schedule certain delivery requests. Jobber is used for job creation, scheduling support, and invoicing preparation. Google Sheets can be used for route tracking, mileage logs, or operational dashboards. Google Maps supports time and distance checks.", "A strong VA does not treat these tools as isolated boxes. Each tool represents part of a larger operational truth. If a delivery request is captured in Acuity but not transferred correctly into Jobber, the schedule breaks. If a ServiceChannel ticket lacks a needed check-in note, verification becomes harder. If mileage is wrong, dispatch or billing may be affected.", "The real skill is understanding what the record means. A row in a sheet is a live service matter. A ticket note may protect compliance. A map lookup may affect the route decision. A job status may guide the next team member. System discipline is therefore a core performance skill.", "By the end of this module, learners should be able to explain the role of each tool and understand how cross-system accuracy protects the workflow."], "discussion": ["Why is tool-to-tool transfer often a hidden source of workload?", "What is the risk of thinking of systems as just places to type information?", "How can one missing note in ServiceChannel affect later work?"], "steps": ["Step 1: Know which system owns which part of the workflow.", "Step 2: Enter complete and accurate details the first time.", "Step 3: Transfer data carefully when the workflow moves between tools.", "Step 4: Use Google Maps and Sheets to support planning and verification.", "Step 5: Update statuses and notes so the next person sees the correct picture."], "qa": [["What is ServiceChannel mainly used for in this account?", "It is used for work-order tickets, service verification, updates, and compliance-oriented record management."], ["What is Acuity used for?", "Acuity is used for intake or scheduling of certain delivery requests and appointment selection."], ["What is Jobber used for?", "Jobber is used for job creation, scheduling support, operational records, and invoicing preparation."], ["Why are Google Sheets useful?", "Sheets help track routes, logs, job data, maintenance records, and other operational details."], ["Why is Google Maps part of the workflow?", "Maps helps estimate travel distance and time, which supports route planning and scheduling."], ["Why do email and phone still matter if systems exist?", "Because some missing details, escalations, and clarifications still require direct communication."], ["What makes tool handoffs risky?", "Information can be missed, duplicated, or entered differently when it moves between systems."], ["What should a VA remember when updating a record?", "That the record represents a real job or issue that affects downstream work."], ["Why is system ownership important?", "It helps the team know which tool is the source for scheduling, tickets, or logs."], ["What is the main lesson in this module?", "The tools only work well when the user understands the operational meaning behind each record."]], "quiz": [{"q": "Which tool is closely tied to work-order ticket verification?", "options": ["ServiceChannel", "Photoshop", "Slack only", "QuickBooks payroll only"], "answer": 0}, {"q": "Which tool is mentioned for scheduling delivery requests?", "options": ["Acuity", "Canva", "WordPress only", "Dropbox"], "answer": 0}, {"q": "What is Jobber commonly used for here?", "options": ["Job creation and invoicing prep", "Video streaming", "Graphic design", "Payroll tax filing"], "answer": 0}, {"q": "Why is Google Maps useful?", "options": ["It supports route and mileage checks", "It replaces billing", "It verifies photos automatically", "It stores contracts"], "answer": 0}, {"q": "Why is Google Sheets valuable?", "options": ["It helps track operational data and logs", "It pressure-washes properties", "It drives delivery trucks", "It replaces ServiceChannel"], "answer": 0}, {"q": "What is a major risk in tool-to-tool handoffs?", "options": ["Missed or inconsistent information", "Automatic improvement", "Less workload", "No need for review"], "answer": 0}, {"q": "Why do direct calls or emails still matter?", "options": ["Some issues require live clarification or escalation", "Systems never store anything", "Because tickets are illegal", "Because clients avoid updates"], "answer": 0}, {"q": "What should a VA think when updating a record?", "options": ["This affects a real service workflow", "This is only decoration", "No one else will see it", "It can be vague"], "answer": 0}, {"q": "What does system ownership help clarify?", "options": ["Which tool controls which part of the process", "Who gets paid first", "What service is cheapest only", "Which driver goes home early"], "answer": 0}, {"q": "What is the core takeaway of Module 5?", "options": ["System use must be accurate and operationally aware", "Clicking buttons is enough", "Maps are optional in dispatch", "Notes do not matter"], "answer": 0}], "assignment": ["Make a simple chart listing each tool and its purpose.", "Describe one risk at each handoff between Acuity, Jobber, and ServiceChannel.", "Write a short explanation of why a map check can change scheduling decisions."], "scenario": "A request is in Acuity, the job exists in Jobber, but the mileage log in Google Sheets was never updated. Explain how that could affect dispatch and reporting."}, {"title": "Module 6: VA Core Responsibilities", "summary": "Learn the support tasks a VA performs across work-order verification, data transfer, communication, and operational tracking.", "objectives": ["Define the VA’s role in this account clearly.", "Understand the difference between admin work and operational support.", "Identify daily tasks tied to ServiceChannel, Acuity, Jobber, and logs.", "Recognize why detail and responsiveness are essential."], "lesson": ["In this account, the VA is not just an assistant answering generic requests. The VA helps protect operations. The notes specifically mention support for data entry, ServiceChannel verification, work-order entry, ticket management, Acuity-to-Jobber transfer, and future clerical help that reduces overload on specialists.", "A large part of the role is accuracy. Service requests, work-order notes, schedule records, route details, maintenance logs, and completion proof all need to be clear and up to date. If a VA misses a check-in note, enters the wrong store, or fails to follow up on missing information, the error can surface much later as a schedule issue, billing issue, or client complaint.", "The dispatch support handbook adds more detail. The assistant may review delivery requests, contact stores for missing information, transfer data between Acuity, Jobber, and Google Sheets, calculate distances in Google Maps, review inspection reports, track maintenance, coordinate with vendors, and document repair status. These are not side tasks. They are workflow controls.", "A strong VA thinks ahead. What information is missing? What will the next person need? Has the ticket been updated? Was the job transferred? Was the safety issue escalated? This proactive mindset is what turns support work into operational value.", "By the end of this module, the learner should be able to explain the VA role as a detail-driven support function that keeps service execution and records aligned."], "discussion": ["Why is the VA role considered operational support instead of just administration?", "Which tasks in this account require proactive thinking rather than simple clicking?", "How can one missed detail create extra workload for the whole team?"], "steps": ["Step 1: Review requests and records for completeness.", "Step 2: Transfer or update data accurately across systems.", "Step 3: Follow up on missing details with stores, vendors, or internal teams.", "Step 4: Track progress and flag problems early.", "Step 5: Escalate urgent exceptions such as safety or compliance concerns."], "qa": [["What is the main role of the VA in this account?", "The VA supports operations by keeping requests, schedules, tickets, verification, and communication organized and accurate."], ["Why is detail so important for a VA here?", "Because small mistakes can disrupt verification, dispatch, billing, and client confidence."], ["What are examples of VA tasks in this account?", "Work-order entry, ServiceChannel updates, Acuity-to-Jobber transfer, missing-info follow-up, logs, and reporting."], ["Why is follow-up part of the VA role?", "Because missing details or unconfirmed statuses can block the next workflow step."], ["How does a VA support specialists who are overloaded?", "By taking on repeatable clerical and verification work so specialists can focus on higher-level decisions."], ["Why is proactive thinking important?", "Because the best support work prevents issues before they become urgent problems."], ["What makes this role different from simple admin work?", "It directly affects operational accuracy, compliance, and service continuity."], ["What should a VA do with urgent safety issues?", "Escalate them immediately and document them clearly."], ["How does the VA help client experience?", "By keeping records accurate, updates timely, and handoffs smooth."], ["What is the biggest lesson in this module?", "A strong VA keeps the operation connected, visible, and easier to manage."]], "quiz": [{"q": "Which best describes the VA’s role in this account?", "options": ["Operational support that protects workflow accuracy", "Field mowing only", "Software development", "Sales-only cold calling"], "answer": 0}, {"q": "Which is a likely VA task here?", "options": ["Updating a ServiceChannel ticket", "Driving a sweeper full-time", "Installing irrigation lines", "Pouring concrete"], "answer": 0}, {"q": "Why is proactive follow-up important?", "options": ["It prevents small issues from blocking later steps", "It slows work down", "It replaces all systems", "It avoids documentation"], "answer": 0}, {"q": "What should a VA do if a safety concern appears in a pre-trip report?", "options": ["Escalate it immediately", "Ignore it", "Delete the note", "Wait until month-end"], "answer": 0}, {"q": "Why can one wrong detail cause large problems?", "options": ["Because the workflow is interconnected", "Because details never matter", "Because systems auto-fix everything", "Because clients do not review anything"], "answer": 0}, {"q": "How does a VA reduce overload on specialists?", "options": ["By handling repeatable support and verification work", "By creating more unclear notes", "By removing all compliance checks", "By avoiding follow-up"], "answer": 0}, {"q": "What makes this role operationally valuable?", "options": ["It supports timing, records, proof, and communication", "It only organizes fonts", "It focuses only on greetings", "It avoids tools"], "answer": 0}, {"q": "Which mindset is strongest for this role?", "options": ["Thinking ahead about what the next step needs", "Waiting for every problem to grow", "Assuming missing details are fine", "Skipping logs"], "answer": 0}, {"q": "How can a VA support client trust?", "options": ["By being accurate, responsive, and organized", "By using vague messages", "By delaying updates", "By ignoring ticket status"], "answer": 0}, {"q": "What is the core takeaway of Module 6?", "options": ["The VA keeps operations aligned and manageable", "The VA only performs generic admin tasks", "The VA replaces all managers", "The VA avoids process work"], "answer": 0}], "assignment": ["Write a 1-paragraph role summary for a new VA joining this account.", "List 5 tasks that protect operations even though they happen behind the scenes.", "Explain why missing-info follow-up is one of the highest-value habits in this role."], "scenario": "A specialist is managing many locations and cannot keep up with verification. Explain which VA tasks can be delegated without lowering quality."}, {"title": "Module 7: Scheduling, Dispatch, and Coordination", "summary": "Understand how jobs are placed, routes are planned, and teams stay aligned across deliveries and recurring site work.", "objectives": ["Explain why scheduling accuracy matters in field-service operations.", "Understand dispatch support for deliveries and recurring site work.", "Use Google Maps and logs to support route planning.", "Recognize how missing details create missed or inefficient service."], "lesson": ["Scheduling and dispatch turn a requested job into real action. In this account, that may mean placing a service visit on a recurring route, assigning a delivery job, planning around store needs, or making sure a subcontractor’s work fits the client’s requirements. The work looks simple from the outside, but a good schedule depends on accurate details.", "The dispatch support handbook shows this clearly. The assistant reviews submissions, verifies required fields, follows up with stores for missing information, creates jobs in Jobber, calculates delivery distances and time in Google Maps, and records route data in tracking sheets. That means dispatch support is not only calendar management. It is quality control before the vehicle or crew moves.", "Scheduling errors can create overbooking, wasted travel time, incorrect job windows, client frustration, and invoice confusion. These problems become more serious when work is recurring or multi-state, such as supporting deliveries for Armstrong Garden Centers in California and Pike Nurseries in Georgia and North Carolina.", "A strong dispatcher or support assistant thinks ahead. Is the address complete? Is the requested date realistic? Is there enough time between jobs? Are the notes clear? Has the route been checked? That mindset reduces preventable mistakes and supports better customer experience.", "By the end of this module, learners should be able to explain how scheduling, dispatch, and coordination work together to protect time, cost, and service reliability."], "discussion": ["Why can one bad schedule entry affect more than one customer?", "How does route planning help both customer experience and internal efficiency?", "Why should stores be contacted quickly when information is missing?"], "steps": ["Step 1: Review the request for address, service type, timing, and contact details.", "Step 2: Check route distance and estimated travel time in Google Maps.", "Step 3: Create or update the job in Jobber with accurate notes.", "Step 4: Confirm there is no overbooking or time conflict.", "Step 5: Record route and schedule details in the tracking sheet.", "Step 6: Communicate any changes or missing information right away."], "qa": [["Why is scheduling a high-risk area in this account?", "Because one mistake can create delays, overbooking, wasted travel, and unhappy clients."], ["What does dispatch coordination include?", "It includes reviewing details, planning routes, creating jobs, checking time windows, and keeping teams informed."], ["Why is Google Maps important in dispatch?", "It helps estimate travel time and mileage so schedules can be realistic."], ["Why are tracking sheets useful?", "They provide visibility into route data, distance, timing, and operational planning."], ["What should happen if store information is incomplete?", "The support assistant should follow up before finalizing the job."], ["Why is overbooking a serious problem?", "It can cause missed appointments, delays, driver overload, and a poor client experience."], ["What is the value of accurate notes in Jobber?", "They help the next team member understand the job without needing to guess."], ["Why does multi-state support require even more coordination?", "Because distance, time zones, route planning, and different store needs all increase complexity."], ["What mindset improves scheduling quality?", "Thinking ahead about time, route, job scope, and what can go wrong."], ["What is the biggest lesson in this module?", "Scheduling is not just calendar entry; it is operational planning that protects service quality."]], "quiz": [{"q": "Why is scheduling accuracy so important?", "options": ["It affects route efficiency and customer experience", "It only changes colors on a calendar", "It removes all need for notes", "It has no effect on service"], "answer": 0}, {"q": "Which tool is used to help calculate travel distance and time?", "options": ["Google Maps", "Canva", "Photoshop", "Notepad"], "answer": 0}, {"q": "What should happen before a job is finalized if details are missing?", "options": ["Follow up for clarification", "Ignore the missing details", "Delete the request", "Guess the address"], "answer": 0}, {"q": "What can overbooking cause?", "options": ["Missed appointments and delays", "Better route efficiency", "Clearer proof automatically", "Lower workload"], "answer": 0}, {"q": "What is one purpose of a tracking sheet?", "options": ["To record route and schedule information", "To replace all communication", "To clean the property", "To verify photos automatically"], "answer": 0}, {"q": "What does strong dispatch support require?", "options": ["Accurate details and proactive planning", "Random schedule changes", "Minimal notes", "No map review"], "answer": 0}, {"q": "Why are clear job notes valuable?", "options": ["They reduce guessing by the next person", "They make records longer only", "They replace the address", "They are only for decoration"], "answer": 0}, {"q": "Why is multi-state support more complex?", "options": ["Because routing and coordination become more demanding", "Because stores do not need updates", "Because maps are not useful", "Because all locations are identical"], "answer": 0}, {"q": "What is dispatch support really doing?", "options": ["Protecting timing, route logic, and operational clarity", "Only moving colors on a calendar", "Removing all field work", "Replacing client communication"], "answer": 0}, {"q": "What is the main takeaway of Module 7?", "options": ["Scheduling is operational planning, not simple data entry", "Maps are optional", "Overbooking is harmless", "Notes do not matter"], "answer": 0}], "assignment": ["Build a sample dispatch checklist for a new delivery request.", "Write a short process note explaining how Google Maps should be used before creating the final job.", "List 4 things that should be verified before a recurring service is dispatched."], "scenario": "A store submits an incomplete delivery request and the driver is already close to full capacity. Explain how a dispatcher should think through the next steps."}, {"title": "Module 8: Proof of Work, Quality Control, and Exceptions", "summary": "Learn how verification, proof, and exception handling protect compliance, billing, and client trust.", "objectives": ["Understand what counts as proof of work in this account.", "Learn how ServiceChannel verification is used to confirm service validity.", "Recognize common exceptions and how to escalate them.", "Understand why quality control continues after the crew leaves."], "lesson": ["In this account, the job is not fully complete just because a crew arrived or a subcontractor says the work is finished. The back office often has to verify check-ins, check-outs, time on site, photo uploads, and other ticket details before the service record is truly usable. This is especially important in platforms like ServiceChannel where client expectations are tied to documented proof.", "The account notes give a clear example of workload here. Admin staff spend heavy time checking if subcontractors checked in correctly, stayed on site long enough, and uploaded required photos. A location expected to take one to one-and-a-half hours should not look the same in the system as a thirty-minute visit unless there is a legitimate explanation. This is why focused verification can take hours each day.", "Quality control also includes reviewing whether the work matched the request. Are the records complete? Are there missing photos? Does the timeline make sense? Was a note added when a check-in had to be corrected through ServiceChannel support? These questions protect accuracy and help the business defend its work.", "Exceptions are a normal part of real operations. Missing proof, access issues, incomplete notes, unclear time on site, client complaints, reschedules, maintenance findings, or safety concerns all need the right response. Good support means noticing exceptions early, documenting them well, and escalating them fast when needed.", "By the end of this module, the learner should be able to explain why proof of work and exception management are critical to compliance, payment readiness, and long-term client trust."], "discussion": ["Why is a completed visit not enough if the record is weak?", "What makes proof review so time-consuming on recurring locations?", "How can small exceptions become major client issues if not handled early?"], "steps": ["Step 1: Review check-in and check-out data for completeness.", "Step 2: Compare time on site against expected service duration.", "Step 3: Confirm photo uploads and other required proof are present.", "Step 4: Document corrections, notes, or calls made to fix the ticket.", "Step 5: Escalate mismatches, safety issues, or recurring proof problems.", "Step 6: Prepare the final record so it is clear for billing or review."], "qa": [["What is proof of work in this account?", "It is the documented evidence that a service was performed correctly, such as check-ins, time records, photos, and notes."], ["Why is ServiceChannel verification so important?", "Because the client may rely on the system record to confirm that the job was truly completed and compliant."], ["What is one common quality-control check?", "Comparing the recorded time on site with the expected duration of the service."], ["Why would a 30-minute record be questioned if the service usually takes longer?", "Because the short duration may suggest incomplete work, a bad check-in, or missing context that must be explained."], ["Why are photos important?", "They support proof, reduce disputes, and help show that the work happened as expected."], ["What is an exception?", "An exception is anything unusual or incomplete that prevents the record from looking clean and trustworthy."], ["What should happen when proof is missing?", "The issue should be documented, investigated, and escalated or corrected promptly."], ["Why does quality control matter after the crew leaves?", "Because the business still needs defensible records for compliance, review, and billing."], ["How can repeated proof problems affect the account?", "They can waste time, slow approvals, weaken trust, and increase client concern."], ["What is the main lesson in this module?", "Verified records protect the business just as much as the physical work protects the property."]], "quiz": [{"q": "What is proof of work?", "options": ["Documented evidence that the service occurred correctly", "A sales slogan only", "A type of landscaping tool", "A replacement for client communication"], "answer": 0}, {"q": "Why is time-on-site verification important?", "options": ["It helps confirm that the visit looks reasonable for the service performed", "It is only decorative", "It eliminates all route planning", "It replaces photos"], "answer": 0}, {"q": "What is one example of an exception?", "options": ["Missing photos", "A complete verified record", "A correct schedule entry", "A clean payment log"], "answer": 0}, {"q": "Why do photos matter?", "options": ["They support proof and reduce disputes", "They only make reports longer", "They replace addresses", "They are never reviewed"], "answer": 0}, {"q": "What should happen if a check-in is wrong or missing?", "options": ["Document and correct the issue", "Ignore it", "Delete the job", "Close the ticket immediately"], "answer": 0}, {"q": "Why can verification take hours across many locations?", "options": ["Because each location’s record must be checked carefully", "Because records check themselves", "Because proof never matters", "Because only one field is reviewed"], "answer": 0}, {"q": "What does quality control protect?", "options": ["Compliance, billing readiness, and trust", "Only team morale", "Only website traffic", "Only route colors"], "answer": 0}, {"q": "Why is a weak record dangerous?", "options": ["It can create disputes and delay approval or billing", "It makes jobs faster", "It improves client confidence automatically", "It reduces the need for follow-up"], "answer": 0}, {"q": "What should a support assistant do with recurring proof problems?", "options": ["Escalate and track them", "Treat them as normal and ignore them", "Remove the notes", "Skip the next review"], "answer": 0}, {"q": "What is the key takeaway of Module 8?", "options": ["The record must prove the job in a way the client can trust", "Only physical labor matters", "Photos are optional on all jobs", "Exceptions should wait"], "answer": 0}], "assignment": ["Create a proof-review checklist for recurring ServiceChannel work orders.", "Write 3 examples of exceptions that should be escalated immediately.", "Explain why verification workload can justify dedicated support staff."], "scenario": "A subcontractor checked in and out, but the visit duration is far below the normal range and no photos were uploaded. Explain how you would review and escalate the record."}, {"title": "Module 9: Customer Communication and Follow-up", "summary": "Use clear updates, professional follow-up, and timely escalation to strengthen client confidence and keep work moving.", "objectives": ["Understand when communication happens across the workflow.", "Write updates that are clear, useful, and professional.", "Recognize when follow-up protects the operation.", "Learn how to communicate across stores, vendors, and internal teams."], "lesson": ["Communication is part of the service experience. In a property-services and dispatch environment, communication may happen before work begins, during intake, while clarifying missing details, after service completion, when proof is incomplete, when repairs are needed, or when a ticket must be corrected. Every update shapes how the client experiences the company.", "The dispatch support handbook also shows that communication is not limited to clients. The assistant may contact stores for missing information, coordinate with vendors for repair estimates, track repair status, and escalate urgent issues such as safety problems or inspection concerns. This means communication must be both professional and operationally useful.", "Strong communication includes the right facts: what happened, what is missing, what was confirmed, what action is needed, and what comes next. Weak communication creates back-and-forth, confusion, and delay. A vague note such as 'please check' is far less helpful than a clear update explaining the issue and the requested next step.", "Follow-up is especially important because it protects momentum. If a client has not approved a quote, if a store has not answered a missing-info request, if a vendor has not returned a repair estimate, or if a ticket still lacks proof, waiting too long slows the workflow and increases frustration.", "By the end of this module, trainees should be able to explain why communication is a core business skill and how strong follow-up improves service reliability and client trust."], "discussion": ["Why do vague updates create more work instead of less work?", "How does fast follow-up protect both client experience and internal efficiency?", "Why is communication with stores and vendors just as important as communication with end clients?"], "steps": ["Step 1: Identify who needs the update and what they actually need to know.", "Step 2: Write or say the status clearly using facts, not guesses.", "Step 3: State what action is needed and who owns the next step.", "Step 4: Follow up when responses are missing or deadlines are approaching.", "Step 5: Escalate urgent issues quickly, especially safety or service-impacting concerns."], "qa": [["Why is communication considered part of the service?", "Because clients judge reliability not only by the work done but also by how clearly and consistently they are updated."], ["What kind of communication might a VA handle?", "Status updates, missing-info follow-up, ticket clarification, store contact, vendor coordination, and internal escalation."], ["Why are vague messages a problem?", "They create confusion, waste time, and often lead to repeated follow-up."], ["What should a strong update include?", "What happened, what is needed, what comes next, and any timing or ownership details."], ["Why is follow-up important?", "It keeps work moving and prevents requests from stalling silently."], ["When should a problem be escalated instead of simply followed up?", "When the issue is urgent, safety-related, repeatedly unresolved, or likely to affect service delivery."], ["Why does store communication matter in dispatch support?", "Because store teams often hold the missing details needed to create an accurate job."], ["Why does vendor communication matter in maintenance tracking?", "Because repairs, estimates, timing, and invoice status all depend on clean coordination."], ["How does strong communication affect trust?", "It makes the company feel organized, responsive, and dependable."], ["What is the main lesson in this module?", "Communication should move the workflow forward, not just fill space in the record."]], "quiz": [{"q": "Why is communication part of the service experience?", "options": ["Because updates shape trust and workflow clarity", "Because only words matter and work does not", "Because systems do not exist", "Because clients do not care about results"], "answer": 0}, {"q": "What should a strong update include?", "options": ["Facts, next steps, and ownership", "Only greetings", "Random opinions", "No action details"], "answer": 0}, {"q": "Why are vague messages harmful?", "options": ["They create confusion and extra back-and-forth", "They solve problems faster", "They reduce follow-up", "They improve proof"], "answer": 0}, {"q": "When is follow-up especially valuable?", "options": ["When details, approvals, or responses are missing", "Only after annual reviews", "Never during scheduling", "Only after payment"], "answer": 0}, {"q": "When should an issue be escalated?", "options": ["When it is urgent, unresolved, or safety-related", "When it is easy and already solved", "When there is no impact", "When nobody needs to know"], "answer": 0}, {"q": "Why does store communication matter?", "options": ["Store teams may hold missing or time-sensitive information", "Stores never affect operations", "Stores always use the same request format", "Store contact is only for billing"], "answer": 0}, {"q": "Why does vendor communication matter?", "options": ["Repairs and maintenance tracking depend on it", "It only changes logo design", "It replaces route planning", "It removes the need for records"], "answer": 0}, {"q": "What makes communication operationally useful?", "options": ["It clearly moves the next step forward", "It is long and decorative", "It hides the issue", "It avoids deadlines"], "answer": 0}, {"q": "How can communication support trust?", "options": ["By being timely, clear, and professional", "By delaying updates", "By using vague notes", "By ignoring missing proof"], "answer": 0}, {"q": "What is the main takeaway of Module 9?", "options": ["Communication should create clarity and momentum", "Communication is optional in operations", "Only clients need updates", "Follow-up slows work down"], "answer": 0}], "assignment": ["Write a professional missing-info follow-up email to a store.", "Create a short status update template for a ServiceChannel proof issue.", "List 3 situations where follow-up should become escalation."], "scenario": "A vendor has not returned a repair estimate, the store still needs an update, and the maintenance log is open. Explain how you would communicate with each party."}, {"title": "Module 10: Performance Standards and Capstone Application", "summary": "Bring the full workflow together and apply everything learned to a realistic operations-support mindset.", "objectives": ["Define strong performance standards for this account.", "Connect all modules into one workflow.", "Apply a capstone mindset to realistic service scenarios.", "Understand how support roles can scale with automation, marketing, and future needs."], "lesson": ["Strong performance in this account is measured by accuracy, timeliness, organization, professionalism, follow-through, and operational awareness. It is not enough to be busy. The work must help the workflow move cleanly from request to proof to billing to follow-up.", "The account notes reveal how valuable dedicated support can be. One specialist managing around 36 locations described verification as a large daily workload, with focused verification alone taking about four hours a day. Nicole estimated that one dedicated VA could likely support two specialists with these checks. That tells us performance is not just about individual speed. It is about building capacity and reducing bottlenecks in the system.", "A capstone trainee should be able to look at a request and think through the full chain: who is the client, what service is needed, what system owns the job, what details must be captured, what proof will be required, what communication is needed, and what exception risks may appear. That is the difference between memorizing tasks and understanding operations.", "The notes also mention future support areas such as web design, marketing, and SEO. That shows this client relationship may grow beyond clerical support into broader business support. A strong operational foundation makes that future growth possible because the team first needs dependable backend support before it can scale outward.", "By the end of this module, learners should be able to explain what good performance looks like, show how the modules connect, and apply their knowledge to a realistic workflow case from intake to follow-up."], "discussion": ["Why is reliability more valuable than simple activity in this account?", "How can one dedicated support person change team capacity?", "Why is backend process strength important before a company scales into marketing or automation?"], "steps": ["Step 1: Review the request with full business context.", "Step 2: Identify the client, system, schedule, and proof requirements.", "Step 3: Support the job through accurate updates and proactive follow-up.", "Step 4: Review the final record for quality, billing readiness, and unresolved issues.", "Step 5: Reflect on what could be automated, delegated, or improved next time."], "qa": [["What does strong performance look like in this account?", "It looks like accurate, timely, dependable support that keeps the workflow moving and reduces rework."], ["Why is reliability more important than appearing busy?", "Because outcomes matter more than motion in service operations."], ["What does the 36-location example show?", "It shows that verification workload is large enough to justify dedicated support and process discipline."], ["Why can one dedicated VA increase capacity?", "Because repeatable verification and data tasks consume many hours that specialists could redirect elsewhere."], ["What is a capstone mindset?", "It is the ability to connect client needs, systems, scheduling, proof, communication, and follow-up in one workflow view."], ["Why are performance standards important?", "They help the team judge quality consistently instead of relying on guesswork."], ["How do the modules connect?", "They move from business understanding to services, clients, workflow, tools, support tasks, dispatch, proof, communication, and final performance."], ["Why mention future web design or SEO support?", "Because the client may grow the relationship after backend support becomes stable and trustworthy."], ["What should a trainee do after each completed workflow?", "Review the result, learn from issues, and identify process improvements."], ["What is the biggest lesson in this final module?", "Great support means understanding the whole business and performing consistently within it."]], "quiz": [{"q": "What is one core performance standard in this account?", "options": ["Accuracy", "Guessing quickly", "Avoiding notes", "Skipping follow-up"], "answer": 0}, {"q": "Why is reliability more valuable than activity alone?", "options": ["Because business outcomes depend on dependable execution", "Because being busy is all that matters", "Because records do not matter", "Because clients never notice inconsistency"], "answer": 0}, {"q": "What does the example of 36 locations mainly show?", "options": ["Verification workload can justify dedicated support", "Location count has no impact", "Only field work matters", "Proof review is unnecessary"], "answer": 0}, {"q": "What is a capstone mindset?", "options": ["Seeing the full workflow as connected", "Treating every task as isolated", "Ignoring client context", "Only reading one system"], "answer": 0}, {"q": "Why are performance standards useful?", "options": ["They create consistent expectations for quality", "They remove the need for training", "They reduce documentation", "They eliminate all problems"], "answer": 0}, {"q": "What should a strong trainee be able to do?", "options": ["Explain the business and support the process from intake to follow-up", "Operate every field machine", "Replace all managers", "Ignore proof requirements"], "answer": 0}, {"q": "Why might the relationship grow into marketing or SEO support later?", "options": ["Because clients may add broader support after core operations stabilize", "Because SEO replaces service quality", "Because backend work has no value", "Because clients always start with design"], "answer": 0}, {"q": "What should happen after a workflow is completed?", "options": ["Review results and look for improvements", "Delete the records", "Ignore lessons learned", "Remove all notes"], "answer": 0}, {"q": "Which phrase best describes excellent support in this account?", "options": ["Consistent, accurate, process-aware, and proactive", "Fast but vague", "Busy without structure", "Minimal communication"], "answer": 0}, {"q": "What is the main takeaway of Module 10?", "options": ["Understand the whole business and support it consistently", "Only one screen matters", "Only sales matters", "The workflow ends at scheduling"], "answer": 0}], "assignment": ["Write a capstone walkthrough of one job from intake to proof and payment readiness.", "List 5 performance standards you would use to coach a new support assistant.", "Name 3 process improvements or automation opportunities you noticed across the modules."], "scenario": "You are asked to support a specialist handling many locations, reduce manual transfer work, and improve verification speed without lowering quality. Explain how you would apply the full training to that challenge."}];
+    const accuracyLabs = [{"title": "Accuracy Lab 1: Business Context Filter", "intro": "Read each statement like a support assistant reviewing a client brief. Mark whether the statement shows a real business understanding or misses the operational context.", "pass_percent": 80, "items": [{"prompt": "A missed sweep only affects appearance, so documentation is optional.", "options": ["Issue found", "No issue"], "answer": 0, "explain": "Missed sweeps affect compliance, readiness, billing, and client trust."}, {"prompt": "A property-services account supports client operations, not just isolated cleaning tasks.", "options": ["Issue found", "No issue"], "answer": 1, "explain": "This is correct and shows business understanding."}, {"prompt": "Recurring work matters because clients buy consistency over time.", "options": ["Issue found", "No issue"], "answer": 1, "explain": "Correct. Recurring work is a trust and retention driver."}, {"prompt": "If the field team finished the work, admin support no longer matters.", "options": ["Issue found", "No issue"], "answer": 0, "explain": "Wrong. Proof, verification, communication, and billing still matter."}, {"prompt": "A primary vendor must protect service quality across many locations.", "options": ["Issue found", "No issue"], "answer": 1, "explain": "Correct. Multi-site consistency is a key expectation."}]}, {"title": "Accuracy Lab 2: Service Matching Check", "intro": "Check whether the service recommended matches the client need. Choose the best answer for each situation.", "pass_percent": 80, "items": [{"prompt": "A retail center wants debris removed from lots every week. Best service?", "options": ["Parking lot sweeping", "Construction cleanup", "Irrigation", "Disinfecting"], "answer": 0, "explain": "Sweeping matches recurring lot cleanliness needs."}, {"prompt": "A storefront has heavy buildup on sidewalks and exterior concrete. Best service?", "options": ["Pressure washing", "Portering only", "Vehicle repair", "SEO"], "answer": 0, "explain": "Pressure washing addresses buildup on hard surfaces."}, {"prompt": "A newly finished tenant space needs final cleanup before turnover. Best service?", "options": ["Construction cleanup", "Street sweeping", "Route planning", "Phone support"], "answer": 0, "explain": "Construction cleanup prepares a site for handoff or occupancy."}, {"prompt": "A client wants healthier plant upkeep and watering control. Best service?", "options": ["Irrigation support", "Disinfecting", "Proof-of-work review", "Inbound calls"], "answer": 0, "explain": "Irrigation supports landscape health and maintenance."}, {"prompt": "A busy office wants a sanitation-focused treatment. Best service?", "options": ["Disinfecting service", "Landscaping", "Check-in repair", "Marketing"], "answer": 0, "explain": "Disinfecting aligns with sanitation and cleaner-space needs."}]}, {"title": "Accuracy Lab 3: Client & Decision-Maker Identification", "intro": "Pick the most likely decision maker or client type based on the situation.", "pass_percent": 80, "items": [{"prompt": "Coordinates multiple store locations and cares about service consistency, tenant standards, and vendors.", "options": ["Property manager", "Driver helper", "Graphic designer", "Cashier"], "answer": 0, "explain": "Property managers commonly manage these priorities."}, {"prompt": "Owns a restaurant location and wants the exterior cleaned before a busy season.", "options": ["Business owner", "Fleet mechanic", "Dispatcher only", "Insurance carrier"], "answer": 0, "explain": "This is typically the business owner or operator."}, {"prompt": "Requests proof photos and completion notes for compliance across national sites.", "options": ["Facilities or operations manager", "Window shopper", "Photographer", "Bank teller"], "answer": 0, "explain": "Facilities or operations managers often focus on proof and compliance."}, {"prompt": "Needs a reliable vendor so internal staff do not manage every maintenance task manually.", "options": ["Commercial client", "Random pedestrian", "Delivery driver", "Competitor"], "answer": 0, "explain": "That is a core commercial outsourcing need."}, {"prompt": "The main support approach to these decision makers should be:", "options": ["Professional, clear, solutions-focused", "Casual and incomplete", "Fast but vague", "Only technical jargon"], "answer": 0, "explain": "Clear, professional communication builds trust."}]}, {"title": "Accuracy Lab 4: Lead-to-Payment Detail Review", "intro": "Review each work-order note and choose what needs attention first.", "pass_percent": 80, "items": [{"prompt": "Lead note: 'Need service soon.' No site address, service type, or contact number. Best action?", "options": ["Request missing details before quoting", "Schedule immediately", "Invoice first", "Close the ticket"], "answer": 0, "explain": "Incomplete intake delays the whole workflow if not clarified."}, {"prompt": "Quote approved, but no date confirmed with the client. Best next step?", "options": ["Move to scheduling confirmation", "Mark as complete", "Send payment reminder only", "Archive the job"], "answer": 0, "explain": "Scheduling should follow approval."}, {"prompt": "Crew completed work, but no proof photos are attached. Best action?", "options": ["Request proof before closing out", "Ignore it", "Delete the job", "Skip invoicing rules"], "answer": 0, "explain": "Proof protects billing and compliance."}, {"prompt": "Invoice is pending, and the client says they never got a completion update. Best action?", "options": ["Send update with documentation and confirm receipt", "Wait two weeks", "Blame the crew", "Remove notes"], "answer": 0, "explain": "Clear follow-up helps move payment and trust."}, {"prompt": "Which statement is most accurate?", "options": ["Each workflow stage affects the next one", "Verification has no effect on payment", "Scheduling is separate from quoting", "Follow-up is optional"], "answer": 0, "explain": "The workflow is connected end to end."}]}, {"title": "Accuracy Lab 5: Systems & Tools Validation", "intro": "Choose the tool or system action that best fits each task.", "pass_percent": 80, "items": [{"prompt": "A new delivery request comes into the booking platform first. Which system likely receives it?", "options": ["Acuity Scheduling", "Vehicle maintenance log", "Photo archive only", "Marketing dashboard"], "answer": 0, "explain": "Acuity is used for incoming bookings in the dispatch workflow."}, {"prompt": "The job then needs to be created for scheduling and invoicing prep. Best destination?", "options": ["Jobber", "Social media planner", "Spam folder", "GPS tracker"], "answer": 0, "explain": "Jobber supports job setup, scheduling, and billing prep."}, {"prompt": "You need a shared tracking record for statuses, mileage, or logs. Best choice?", "options": ["Google Sheets", "Parking cone", "Service van", "Printer cable"], "answer": 0, "explain": "Sheets is useful for shared tracking and reporting."}, {"prompt": "A field in one system does not match the source entry. Best practice?", "options": ["Verify and correct it immediately", "Assume it is fine", "Duplicate the record", "Ignore until payment"], "answer": 0, "explain": "System accuracy prevents downstream issues."}, {"prompt": "Good system use creates:", "options": ["Visibility, structure, and fewer avoidable errors", "More confusion", "Less accountability", "No need for follow-up"], "answer": 0, "explain": "That is the core lesson of this module."}]}, {"title": "Accuracy Lab 6: VA Responsibility Check", "intro": "Spot the strongest VA action in each situation.", "pass_percent": 80, "items": [{"prompt": "A service request is missing the client contact person. Best VA action?", "options": ["Follow up and complete the record", "Leave it blank forever", "Schedule anyway", "Delete the request"], "answer": 0, "explain": "A VA protects accuracy by completing key details."}, {"prompt": "A specialist is overloaded with verification work. Helpful VA support includes:", "options": ["Handling structured checks and updates accurately", "Guessing through tickets", "Ignoring photo issues", "Only changing colors in a sheet"], "answer": 0, "explain": "Verification support is a real operational contribution."}, {"prompt": "The strongest VA mindset is:", "options": ["Operational support, not just admin tasks", "Wait for problems", "Only do one tool update", "Avoid communication"], "answer": 0, "explain": "The role supports smooth workflow execution."}, {"prompt": "What happens when a VA updates the wrong site information?", "options": ["Scheduling, proof, and billing can all be affected", "Nothing important", "Only the logo changes", "Clients never notice"], "answer": 0, "explain": "Small errors can create large operational issues."}, {"prompt": "Which trait matters most in this role?", "options": ["Accuracy and responsiveness", "Random speed only", "Minimal notes", "Working without process"], "answer": 0, "explain": "Accuracy and responsiveness are core support traits."}]}, {"title": "Accuracy Lab 7: Scheduling & Dispatch Spot Check", "intro": "Review each dispatch situation and identify the best next move.", "pass_percent": 80, "items": [{"prompt": "The site is scheduled, but the service type is missing from the dispatch note. Best action?", "options": ["Clarify the scope before dispatch", "Send the crew anyway", "Invoice immediately", "Close the ticket"], "answer": 0, "explain": "Dispatch needs clear service scope."}, {"prompt": "Two bookings overlap because a request was copied late from Acuity to Jobber. Best takeaway?", "options": ["Timely transfer prevents overbooking", "Overbooking is normal", "Verification is unrelated", "Jobber should be skipped"], "answer": 0, "explain": "Prompt system updates reduce conflicts."}, {"prompt": "A client changes the time window the same day. Best response?", "options": ["Update the schedule and communicate changes quickly", "Ignore the message", "Wait until next week", "Delete the job"], "answer": 0, "explain": "Fast coordination protects service delivery."}, {"prompt": "Dispatch coordination means:", "options": ["Matching the right job details to the right team and timing", "Only printing invoices", "Only answering calls", "Avoiding documentation"], "answer": 0, "explain": "That is the operational purpose of dispatch."}, {"prompt": "Poor scheduling often leads to:", "options": ["Missed appointments and unhappy clients", "Better efficiency", "Automatic payment", "Less need for proof"], "answer": 0, "explain": "Scheduling errors have direct service consequences."}]}, {"title": "Accuracy Lab 8: Proof, QC, and Exception Review", "intro": "Decide whether each completion record is ready or needs escalation.", "pass_percent": 80, "items": [{"prompt": "Completion note has no photos, but the client requires visual proof. Status?", "options": ["Needs escalation", "Ready to close"], "answer": 0, "explain": "Missing required proof should be escalated or corrected."}, {"prompt": "Check-in is 8:00 AM and check-out is 8:18 AM on a site that normally needs 1 hour minimum. Status?", "options": ["Needs escalation", "Ready to close"], "answer": 0, "explain": "The time on site may not meet expectations."}, {"prompt": "Completion notes, photos, and timing all match the service scope. Status?", "options": ["Needs escalation", "Ready to close"], "answer": 1, "explain": "This appears complete and supportable."}, {"prompt": "A client says the area serviced does not match the ticket scope. Status?", "options": ["Needs escalation", "Ready to close"], "answer": 0, "explain": "Scope mismatch is an exception that requires review."}, {"prompt": "Why does strong proof of work matter?", "options": ["It supports billing, trust, and quality control", "It only fills space", "It replaces scheduling", "It removes the need for clients"], "answer": 0, "explain": "Proof protects the company and client relationship."}]}, {"title": "Accuracy Lab 9: Communication Quality Check", "intro": "Choose the response that shows the best client communication standard.", "pass_percent": 80, "items": [{"prompt": "Client asks for a status update on an open verification issue. Best response style?", "options": ["Clear, polite, and specific with next steps", "Very short and vague", "Defensive and rushed", "No reply"], "answer": 0, "explain": "Specific and professional updates build confidence."}, {"prompt": "You need missing site details before scheduling. Best approach?", "options": ["Request the exact missing information and explain why it is needed", "Say 'send info' only", "Guess the details", "Close the ticket"], "answer": 0, "explain": "Specific requests reduce back-and-forth."}, {"prompt": "A client concern is urgent and safety-related. Best action?", "options": ["Acknowledge and escalate immediately", "Wait for the weekly meeting", "Hide the issue", "Only update your notebook"], "answer": 0, "explain": "Urgent safety issues need prompt escalation."}, {"prompt": "Follow-up after completion helps with:", "options": ["Trust, clarity, and repeat business", "Nothing valuable", "Only social media", "Avoiding documentation"], "answer": 0, "explain": "Follow-up strengthens the relationship."}, {"prompt": "Which message is strongest?", "options": ["We reviewed the ticket, requested the missing check-in correction, and will update you once ServiceChannel confirms.", "We are looking at it.", "Okay.", "Not sure."], "answer": 0, "explain": "It is specific, proactive, and professional."}]}, {"title": "Accuracy Lab 10: Capstone Decision Drill", "intro": "Select the best full-workflow decision in each capstone situation.", "pass_percent": 80, "items": [{"prompt": "A specialist managing many locations spends hours on verification. Best support improvement?", "options": ["Assign structured VA verification support with clear QC rules", "Remove proof checks", "Delay all tickets", "Stop using systems"], "answer": 0, "explain": "This directly targets the bottleneck without lowering standards."}, {"prompt": "Manual Acuity-to-Jobber re-entry causes scheduling slowdowns. Best improvement focus?", "options": ["Accurate transfer process and automation planning", "Skip Jobber", "Ignore overbooking risk", "Only add more screenshots"], "answer": 0, "explain": "A consistent transfer workflow is essential and automation may help later."}, {"prompt": "The client wants help now with admin support and may add marketing later. Best approach?", "options": ["Stabilize core operations first, then expand support", "Start with SEO only", "Avoid operational support", "Refuse phased growth"], "answer": 0, "explain": "Strong backend support creates the base for later services."}, {"prompt": "What does a strong capstone answer include?", "options": ["Client context, workflow steps, risks, and support actions", "Only one tool name", "Only the final invoice", "A guess"], "answer": 0, "explain": "A strong answer connects the whole operation."}, {"prompt": "The best final mindset for this account is:", "options": ["Consistent, accurate, proactive support across the full workflow", "Work only when reminded", "Move fast and skip details", "Treat every ticket the same without context"], "answer": 0, "explain": "This reflects the course standards."}]}];
+    const QUIZ_PASS = 70;
+    const COURSE_KEY = 'nppwMppTrainingProgressV3';
+    const DEFAULT_STATE = {
+      current: 0,
+      learner: { name:'', email:'' },
+      records: modules.map(() => ({
+        quizBest: 0,
+        quizPassed: false,
+        accuracyBest: 0,
+        accuracyPassed: false,
+        submitted: false
+      }))
     };
 
-    const buttons = document.querySelectorAll('.tagbtn[data-scenario]');
-    const consoleEl = document.getElementById('console');
-    const runBtn = document.getElementById('runBtn');
-    const summaryEl = document.getElementById('scenarioSummary');
-    let selected = 'success';
+    let state = loadState();
 
-    function setActive(name){
-      selected = name;
-      buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.scenario === name));
-    }
-    buttons.forEach(btn => btn.addEventListener('click', ()=> setActive(btn.dataset.scenario)));
+    const el = {
+      moduleList: document.getElementById('moduleList'),
+      progressText: document.getElementById('progressText'),
+      progressFill: document.getElementById('progressFill'),
+      lockedCount: document.getElementById('lockedCount'),
+      quizRing: document.getElementById('quizRing'),
+      accuracyRing: document.getElementById('accuracyRing'),
+      quizRingText: document.getElementById('quizRingText'),
+      accuracyRingText: document.getElementById('accuracyRingText'),
+      moduleTitle: document.getElementById('moduleTitle'),
+      moduleSummary: document.getElementById('moduleSummary'),
+      objectiveTags: document.getElementById('objectiveTags'),
+      lessonBlock: document.getElementById('lessonBlock'),
+      discussionBlock: document.getElementById('discussionBlock'),
+      stepsBlock: document.getElementById('stepsBlock'),
+      objectivesBlock: document.getElementById('objectivesBlock'),
+      faqBlock: document.getElementById('faqBlock'),
+      quizBlock: document.getElementById('quizBlock'),
+      assignmentBlock: document.getElementById('assignmentBlock'),
+      scenarioBlock: document.getElementById('scenarioBlock'),
+      accuracyBlock: document.getElementById('accuracyBlock'),
+      accuracyTitle: document.getElementById('accuracyTitle'),
+      accuracyIntro: document.getElementById('accuracyIntro'),
+      quizResult: document.getElementById('quizResult'),
+      accuracyResult: document.getElementById('accuracyResult'),
+      jumpAccuracyBtn: document.getElementById('jumpAccuracyBtn'),
+      jumpQuizBtn: document.getElementById('jumpQuizBtn'),
+      resetProgressBtn: document.getElementById('resetProgressBtn'),
+      traineeName: document.getElementById('traineeName'),
+      traineeEmail: document.getElementById('traineeEmail'),
+      saveLearnerBtn: document.getElementById('saveLearnerBtn'),
+      submissionStatus: document.getElementById('submissionStatus'),
+      moduleStatusText: document.getElementById('moduleStatusText'),
+      moduleCompletionPill: document.getElementById('moduleCompletionPill'),
+      bestScoreNotice: document.getElementById('bestScoreNotice'),
+      submitQuizBtn: document.getElementById('submitQuizBtn'),
+      resetQuizBtn: document.getElementById('resetQuizBtn'),
+      submitAccuracyBtn: document.getElementById('submitAccuracyBtn'),
+      resetAccuracyBtn: document.getElementById('resetAccuracyBtn'),
+      toastWrap: document.getElementById('toastWrap'),
+      welcomeModal: document.getElementById('welcomeModal'),
+      modalName: document.getElementById('modalName'),
+      modalEmail: document.getElementById('modalEmail'),
+      startTrainingBtn: document.getElementById('startTrainingBtn'),
+      tabButtons: Array.from(document.querySelectorAll('.tab-btn'))
+    };
 
-    async function runScenario(){
-      const s = scenarios[selected];
-      consoleEl.textContent = '';
-      summaryEl.innerHTML = `<h4>${s.summaryTitle}</h4><p>${s.summaryText}</p>`;
-      for(const line of s.logs){
-        consoleEl.textContent += line + '\n';
-        await new Promise(r => setTimeout(r, 350));
-        consoleEl.scrollTop = consoleEl.scrollHeight;
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(COURSE_KEY) || 'null');
+        if (!saved) return structuredClone(DEFAULT_STATE);
+        const merged = structuredClone(DEFAULT_STATE);
+        merged.current = typeof saved.current === 'number' ? saved.current : 0;
+        if (saved.learner) {
+          merged.learner.name = saved.learner.name || '';
+          merged.learner.email = saved.learner.email || '';
+        }
+        if (Array.isArray(saved.records)) {
+          merged.records = merged.records.map((rec, i) => Object.assign(rec, saved.records[i] || {}));
+        }
+        if (merged.current < 0 || merged.current >= modules.length) merged.current = 0;
+        return merged;
+      } catch {
+        return structuredClone(DEFAULT_STATE);
       }
     }
-    runBtn.addEventListener('click', runScenario);
-    setActive('success');
-    runScenario();
+
+    function saveState() {
+      localStorage.setItem(COURSE_KEY, JSON.stringify(state));
+    }
+
+    function moduleComplete(index) {
+      const rec = state.records[index];
+      return !!(rec.quizPassed && rec.accuracyPassed);
+    }
+
+    function isUnlocked(index) {
+      return index === 0 || moduleComplete(index - 1) || moduleComplete(index);
+    }
+
+    function completedCount() {
+      return state.records.filter((_, i) => moduleComplete(i)).length;
+    }
+
+    function avgOf(key) {
+      const values = state.records.map(r => r[key] || 0).filter(v => v > 0);
+      if (!values.length) return 0;
+      return Math.round(values.reduce((a,b) => a+b, 0) / values.length);
+    }
+
+    function showToast(message, type='info') {
+      const div = document.createElement('div');
+      div.className = 'toast';
+      div.innerHTML = `<strong>${type === 'success' ? 'Success' : type === 'error' ? 'Action needed' : 'Update'}</strong><div style="margin-top:6px; color:var(--muted); line-height:1.55;">${message}</div>`;
+      el.toastWrap.appendChild(div);
+      setTimeout(() => {
+        div.style.opacity = '0';
+        div.style.transform = 'translateY(-8px)';
+        div.style.transition = 'all .25s ease';
+        setTimeout(() => div.remove(), 280);
+      }, 3200);
+    }
+
+    function requireLearner() {
+      if (state.learner.name.trim()) return true;
+      el.welcomeModal.classList.remove('hidden');
+      showToast('Enter the trainee name before taking tests.', 'error');
+      return false;
+    }
+
+    function renderSidebar() {
+      el.moduleList.innerHTML = '';
+      modules.forEach((mod, index) => {
+        const rec = state.records[index];
+        const unlocked = isUnlocked(index);
+        const status = moduleComplete(index) ? 'Completed' : unlocked ? 'Unlocked' : 'Locked';
+        const btn = document.createElement('button');
+        btn.className = 'module-btn' + (state.current === index ? ' active' : '');
+        btn.disabled = !unlocked;
+        btn.innerHTML = `
+          <strong>${mod.title}</strong>
+          <span class="module-status">${status} • Quiz ${rec.quizBest || 0}% • Accuracy ${rec.accuracyBest || 0}%</span>
+        `;
+        btn.addEventListener('click', () => {
+          if (!unlocked) return;
+          state.current = index;
+          saveState();
+          renderAll();
+          window.scrollTo({top:0, behavior:'smooth'});
+        });
+        el.moduleList.appendChild(btn);
+      });
+    }
+
+    function renderProgress() {
+      const completed = completedCount();
+      const pct = Math.round((completed / modules.length) * 100);
+      el.progressText.textContent = `${completed} / ${modules.length} modules`;
+      el.progressFill.style.width = pct + '%';
+      const locked = modules.length - 1 - completed;
+      el.lockedCount.textContent = `${Math.max(0, locked)} locked`;
+      const quizAvg = avgOf('quizBest');
+      const accuracyAvg = avgOf('accuracyBest');
+      el.quizRing.style.setProperty('--pct', quizAvg);
+      el.accuracyRing.style.setProperty('--pct', accuracyAvg);
+      el.quizRingText.textContent = quizAvg + '%';
+      el.accuracyRingText.textContent = accuracyAvg + '%';
+    }
+
+    function renderHero(mod, index) {
+      const rec = state.records[index];
+      el.moduleTitle.textContent = mod.title;
+      el.moduleSummary.textContent = mod.summary;
+      el.objectiveTags.innerHTML = '';
+      mod.objectives.forEach(item => {
+        const span = document.createElement('span');
+        span.className = 'chip';
+        span.textContent = item;
+        el.objectiveTags.appendChild(span);
+      });
+      el.traineeName.value = state.learner.name || '';
+      el.traineeEmail.value = state.learner.email || '';
+      el.submissionStatus.textContent = state.learner.name ? 'Learner saved' : 'Needs learner';
+      const quizLabel = rec.quizPassed ? 'Quiz passed' : 'Quiz pending';
+      const accuracyLabel = rec.accuracyPassed ? 'Accuracy passed' : 'Accuracy pending';
+      el.moduleStatusText.textContent = `${quizLabel} • ${accuracyLabel}`;
+      el.moduleCompletionPill.textContent = moduleComplete(index) ? 'Completed' : 'In progress';
+      el.bestScoreNotice.textContent = `Best quiz: ${rec.quizBest || 0}% • Best accuracy: ${rec.accuracyBest || 0}%`;
+    }
+
+    function renderOverview(mod) {
+      el.lessonBlock.innerHTML = mod.lesson.map(p => `<p>${p}</p>`).join('');
+      el.discussionBlock.innerHTML = mod.discussion.map((d, i) => `<div class="item-card"><strong>Discussion ${i+1}:</strong> ${d}</div>`).join('');
+      el.stepsBlock.innerHTML = mod.steps.map((step, i) => `
+        <div class="timeline-step">
+          <div class="step-num">${i+1}</div>
+          <div class="item-card" style="margin:0;">${step}</div>
+        </div>
+      `).join('');
+      el.objectivesBlock.innerHTML = mod.objectives.map((o, i) => `<div class="item-card"><strong>Objective ${i+1}:</strong> ${o}</div>`).join('');
+      el.assignmentBlock.innerHTML = mod.assignment.map((a, i) => `<div class="item-card"><strong>Task ${i+1}:</strong> ${a}</div>`).join('');
+      el.scenarioBlock.textContent = mod.scenario;
+    }
+
+    function renderFaqs(mod) {
+      el.faqBlock.innerHTML = '';
+      mod.qa.forEach((pair, idx) => {
+        const wrap = document.createElement('div');
+        wrap.className = 'faq';
+        wrap.innerHTML = `<button type="button"><span>${idx+1}. ${pair[0]}</span><span>+</span></button><div class="answer">${pair[1]}</div>`;
+        wrap.querySelector('button').addEventListener('click', () => wrap.classList.toggle('open'));
+        el.faqBlock.appendChild(wrap);
+      });
+    }
+
+    function renderAccuracy(index) {
+      const lab = accuracyLabs[index];
+      el.accuracyTitle.textContent = lab.title;
+      el.accuracyIntro.textContent = lab.intro;
+      el.accuracyBlock.innerHTML = '';
+      lab.items.forEach((item, i) => {
+        const card = document.createElement('div');
+        card.className = 'accuracy-card';
+        card.innerHTML = `<h4>${i+1}. ${item.prompt}</h4>` + item.options.map((opt, optIndex) =>
+          `<label><input type="radio" name="acc${i}" value="${optIndex}"> <span>${opt}</span></label>`
+        ).join('');
+        el.accuracyBlock.appendChild(card);
+      });
+      el.accuracyResult.textContent = '';
+      el.accuracyResult.className = 'result';
+    }
+
+    function renderQuiz(index) {
+      const mod = modules[index];
+      el.quizBlock.innerHTML = '';
+      mod.quiz.forEach((item, qIndex) => {
+        const card = document.createElement('div');
+        card.className = 'qcard';
+        card.innerHTML = `<h4>${qIndex+1}. ${item.q}</h4>` + item.options.map((opt, optIndex) =>
+          `<label><input type="radio" name="quiz${qIndex}" value="${optIndex}"> <span>${opt}</span></label>`
+        ).join('');
+        el.quizBlock.appendChild(card);
+      });
+      el.quizResult.textContent = '';
+      el.quizResult.className = 'result';
+    }
+
+    async function submitNetlifyResult(index) {
+      const rec = state.records[index];
+      if (!state.learner.name.trim() || rec.submitted === true || !moduleComplete(index)) return;
+      const payload = {
+        'form-name': 'training-results',
+        'trainee_name': state.learner.name.trim(),
+        'email': state.learner.email.trim(),
+        'module': modules[index].title,
+        'quiz_score': `${Math.round((rec.quizBest/100) * modules[index].quiz.length)} / ${modules[index].quiz.length}`,
+        'quiz_percent': String(rec.quizBest || 0),
+        'accuracy_score': `${Math.round((rec.accuracyBest/100) * accuracyLabs[index].items.length)} / ${accuracyLabs[index].items.length}`,
+        'accuracy_percent': String(rec.accuracyBest || 0),
+        'status': moduleComplete(index) ? 'Completed' : 'In progress',
+        'completed_modules': String(completedCount()),
+        'timestamp': new Date().toLocaleString(),
+        'site_name': 'NPPW + MPP Interactive Training Academy'
+      };
+      try {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(payload).toString()
+        });
+        rec.submitted = true;
+        saveState();
+        el.submissionStatus.textContent = 'Submitted to Netlify form';
+        showToast(`Module result submitted for ${state.learner.name}.`, 'success');
+        if (completedCount() === modules.length) {
+          showToast('All modules completed. Final course progress is now recorded locally and in Netlify form submissions.', 'success');
+        }
+      } catch (err) {
+        showToast('Local progress saved, but Netlify submission could not be confirmed in preview mode.', 'error');
+      }
+    }
+
+    function checkCompletionUnlock(index) {
+      const rec = state.records[index];
+      if (moduleComplete(index)) {
+        if (index < modules.length - 1 && state.current === index) {
+          state.current = index + 1;
+        }
+        saveState();
+        renderSidebar();
+        renderProgress();
+        renderHero(modules[state.current], state.current);
+        submitNetlifyResult(index);
+        setTimeout(() => {
+          if (state.current === index + 1 && index < modules.length - 1) {
+            renderAll();
+            switchTab('overview');
+            window.scrollTo({top:0, behavior:'smooth'});
+          }
+        }, 600);
+      }
+    }
+
+    function handleAccuracySubmit() {
+      if (!requireLearner()) return;
+      const index = state.current;
+      const lab = accuracyLabs[index];
+      let correct = 0;
+      lab.items.forEach((item, i) => {
+        const selected = document.querySelector(`input[name="acc${i}"]:checked`);
+        if (selected && Number(selected.value) === item.answer) correct += 1;
+      });
+      const percent = Math.round((correct / lab.items.length) * 100);
+      const rec = state.records[index];
+      rec.accuracyBest = Math.max(rec.accuracyBest || 0, percent);
+      rec.accuracyPassed = rec.accuracyBest >= lab.pass_percent;
+      if (!rec.accuracyPassed) rec.submitted = false;
+      saveState();
+      el.accuracyResult.textContent = `Accuracy score: ${correct} / ${lab.items.length} (${percent}%)${rec.accuracyPassed ? ' • Passed' : ' • Review the details and try again'}`;
+      el.accuracyResult.className = 'result ' + (rec.accuracyPassed ? 'pass' : 'fail');
+      renderProgress();
+      renderSidebar();
+      renderHero(modules[index], index);
+      if (rec.accuracyPassed) {
+        showToast('Accuracy lab passed. You can now focus on the quiz gate.', 'success');
+      } else {
+        showToast('Accuracy lab not passed yet. Slow down and check each detail carefully.', 'error');
+      }
+      checkCompletionUnlock(index);
+    }
+
+    function handleQuizSubmit() {
+      if (!requireLearner()) return;
+      const index = state.current;
+      const mod = modules[index];
+      let correct = 0;
+      mod.quiz.forEach((item, i) => {
+        const selected = document.querySelector(`input[name="quiz${i}"]:checked`);
+        if (selected && Number(selected.value) === item.answer) correct += 1;
+      });
+      const percent = Math.round((correct / mod.quiz.length) * 100);
+      const rec = state.records[index];
+      rec.quizBest = Math.max(rec.quizBest || 0, percent);
+      rec.quizPassed = rec.quizBest >= QUIZ_PASS;
+      if (!rec.quizPassed) rec.submitted = false;
+      saveState();
+      el.quizResult.textContent = `Quiz score: ${correct} / ${mod.quiz.length} (${percent}%)${rec.quizPassed ? ' • Passed' : ' • Try again'}`;
+      el.quizResult.className = 'result ' + (rec.quizPassed ? 'pass' : 'fail');
+      renderProgress();
+      renderSidebar();
+      renderHero(modules[index], index);
+      if (rec.quizPassed) {
+        showToast('Quiz passed. Complete the accuracy lab too if you have not yet.', 'success');
+      } else {
+        showToast('Quiz not passed yet. Review the lesson and process tabs, then try again.', 'error');
+      }
+      checkCompletionUnlock(index);
+    }
+
+    function resetAccuracyLab() {
+      document.querySelectorAll('#accuracyBlock input[type="radio"]').forEach(input => input.checked = false);
+      el.accuracyResult.textContent = '';
+      el.accuracyResult.className = 'result';
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('#quizBlock input[type="radio"]').forEach(input => input.checked = false);
+      el.quizResult.textContent = '';
+      el.quizResult.className = 'result';
+    }
+
+    function switchTab(tab) {
+      el.tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
+      ['overview','process','qa','accuracy','quiz','apply'].forEach(name => {
+        document.getElementById('tab-' + name).classList.toggle('hidden', name !== tab);
+      });
+    }
+
+    function saveLearnerFromInputs(name, email) {
+      state.learner.name = name.trim();
+      state.learner.email = email.trim();
+      saveState();
+      el.traineeName.value = state.learner.name;
+      el.traineeEmail.value = state.learner.email;
+      el.submissionStatus.textContent = state.learner.name ? 'Learner saved' : 'Needs learner';
+    }
+
+    function renderAll() {
+      const index = state.current;
+      const mod = modules[index];
+      renderSidebar();
+      renderProgress();
+      renderHero(mod, index);
+      renderOverview(mod);
+      renderFaqs(mod);
+      renderAccuracy(index);
+      renderQuiz(index);
+      if (!state.learner.name.trim()) {
+        el.welcomeModal.classList.remove('hidden');
+      } else {
+        el.welcomeModal.classList.add('hidden');
+      }
+    }
+
+    el.tabButtons.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+    el.jumpAccuracyBtn.addEventListener('click', () => {
+      switchTab('accuracy');
+      document.getElementById('tab-accuracy').scrollIntoView({behavior:'smooth'});
+    });
+    el.jumpQuizBtn.addEventListener('click', () => {
+      switchTab('quiz');
+      document.getElementById('tab-quiz').scrollIntoView({behavior:'smooth'});
+    });
+
+    el.saveLearnerBtn.addEventListener('click', () => {
+      if (!el.traineeName.value.trim()) {
+        showToast('Please enter the trainee full name.', 'error');
+        return;
+      }
+      saveLearnerFromInputs(el.traineeName.value, el.traineeEmail.value);
+      showToast('Learner details saved.', 'success');
+      el.welcomeModal.classList.add('hidden');
+      renderHero(modules[state.current], state.current);
+    });
+
+    el.startTrainingBtn.addEventListener('click', () => {
+      if (!el.modalName.value.trim()) {
+        showToast('Enter the trainee full name to start training.', 'error');
+        return;
+      }
+      saveLearnerFromInputs(el.modalName.value, el.modalEmail.value);
+      el.welcomeModal.classList.add('hidden');
+      renderAll();
+      showToast('Training profile saved. Begin with Module 1 overview.', 'success');
+    });
+
+    el.resetProgressBtn.addEventListener('click', () => {
+      if (!confirm('Reset all module progress and scores?')) return;
+      state = structuredClone(DEFAULT_STATE);
+      saveState();
+      renderAll();
+      switchTab('overview');
+      window.scrollTo({top:0, behavior:'smooth'});
+      showToast('All progress has been reset.', 'success');
+    });
+
+    el.submitAccuracyBtn.addEventListener('click', handleAccuracySubmit);
+    el.resetAccuracyBtn.addEventListener('click', resetAccuracyLab);
+    el.submitQuizBtn.addEventListener('click', handleQuizSubmit);
+    el.resetQuizBtn.addEventListener('click', resetQuiz);
+
+    renderAll();
+    switchTab('overview');
   </script>
 </body>
 </html>
